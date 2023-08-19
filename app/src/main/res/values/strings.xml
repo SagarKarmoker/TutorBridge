@@ -77,4 +77,6 @@
                  the emp_name so initializer block uses
                  the default values and
                  print to the standard output.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/Home"
+        android:id="@+id/home"
         android:enabled="true"
         android:icon="@drawable/home"
         android:title="@string/Home"/>
@@ -13,12 +13,12 @@
         android:title="@string/chat"/>
 
     <item
-        android:id="@+id/History"
+        android:id="@+id/history"
         android:enabled="true"
         android:icon="@drawable/history"
         android:title="@string/history"/>
     <item
-        android:id="@+id/Profile"
+        android:id="@+id/profile"
         android:enabled="true"
         android:icon="@drawable/profile"
         android:title="@string/Profile"/>
