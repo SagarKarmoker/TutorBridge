@@ -37,7 +37,7 @@ public class DashboardActivity extends AppCompatActivity {
                     selectedFragment = new HomeFragment();
                 }
                 if(R.id.chat == item.getItemId()){
-                    selectedFragment = new ChatFragment();
+                    selectedFragment = new ChatPageFragment(); //update it new ChatFragment()
                 }
                 if(R.id.history == item.getItemId()){
                     selectedFragment = new ItemFragment();

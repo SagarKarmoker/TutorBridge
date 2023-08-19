@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ChatPageFragment"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:layout_marginBottom="80dp"
+    android:background="@color/body_bg">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/chatHeadBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#f6f6ef"
+        >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/chatBackBtn"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/back"
+                android:layout_marginTop="4dp"
+                />
+
+            <TextView
+                android:id="@+id/orderID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/chatBackBtn"
+                android:text="Order: #99022"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginStart="10dp" />
+
+            <ImageView
+                android:id="@+id/chatMoreBtn"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/more"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="end"
+                />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="40dp">
+
+        <androidx.fragment.app.FragmentContainerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/chatBar">
+
+        </androidx.fragment.app.FragmentContainerView>
+
+        <RelativeLayout
+            android:id="@+id/chatBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="10dp"
+            >
+
+            <ImageButton
+                android:id="@+id/addFile"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/attach"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="2dp"
+                android:background="@color/body_bg"
+                android:layout_alignParentStart="true"
+                android:layout_alignBaseline="@id/chatCard"
+                />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/chatCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:shapeAppearance="@style/ShapeAppearance.Material3.Corner.Full"
+                android:layout_centerInParent="true"
+                android:minEms="17"
+                android:maxEms="17"
+                android:layout_marginRight="4dp"
+                android:hint="Type your problem here"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/chatMsg"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageButton
+                android:id="@+id/sendMsg"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/send_chat"
+                android:background="@color/body_bg"
+                android:layout_alignParentRight="true"
+                android:layout_alignBaseline="@id/chatCard"
+                android:layout_marginBottom="30dp"
+                />
+
+        </RelativeLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
