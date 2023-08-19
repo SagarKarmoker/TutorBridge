@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     tools:context=".RequestPayment"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    android:background="@color/body_bg"
+    >
 
     <RelativeLayout
         android:id="@+id/rePayBar"
@@ -25,8 +27,7 @@
             android:layout_height="25dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/back"
-            android:layout_marginLeft="10dp"/>
+            android:src="@drawable/back" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -43,7 +44,6 @@
             android:clickable="true"
             android:focusable="true"
             android:src="@drawable/history"
-            android:layout_marginRight="15dp"
             android:layout_alignParentEnd="true"
             />
 
@@ -98,21 +98,25 @@
 
         >
         <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/bkashBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Bkash"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/nagadBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Nagad"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/cardBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Visa"/>
+            android:text="Visa/MasterCard"/>
         <com.google.android.material.radiobutton.MaterialRadioButton
+            android:id="@+id/bankBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
