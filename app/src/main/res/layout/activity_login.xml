@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/body_bg"
+    android:padding="30dp"
+    tools:context=".SignupActivity">
+
+
+    <ImageView
+        android:id="@+id/ivBackArrowL"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/back_button"
+        android:padding="10dp"
+        android:src="@drawable/back_button_arrow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageView>
+
+    <TextView
+        android:id="@+id/tvTittle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/roboto"
+        android:text="Welcome !"
+        android:textColor="@color/button_bg"
+        android:textSize="45dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ivBackArrowL" />
+
+    <TextView
+        android:id="@+id/tvPera1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Last Stop to solve your problem"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvTittle"
+        app:layout_constraintTop_toBottomOf="@+id/tvTittle" />
+
+    <!--    user name section-->
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="User Name :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvPera1"
+        app:layout_constraintTop_toBottomOf="@+id/tvPera1" />
+
+    <EditText
+        android:id="@+id/etUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvUserName"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+
+
+    <!--    password section-->
+    <TextView
+        android:id="@+id/tvPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Password :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/etUserName"
+        app:layout_constraintTop_toBottomOf="@+id/etUserName" />
+
+    <EditText
+        android:id="@+id/etPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textSize="16dp"
+        android:padding="10dp"
+        app:layout_constraintStart_toStartOf="@+id/tvPassword"
+        app:layout_constraintTop_toBottomOf="@+id/tvPassword" />
+
+    <!--    signup Button section-->
+    <Button
+        android:id="@+id/btnLoginPage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/button_border"
+        android:text="Login"
+        android:textColor="@color/button_bg"
+
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/etPassword"
+        app:layout_constraintStart_toStartOf="@+id/checkBox"
+        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+
+    <!--    toggle section-->
+    <TextView
+        android:id="@+id/toggleTextL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Don't have an account ?"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnLoginPage" />
+
+    <TextView
+        android:id="@+id/btnToggleL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="SignUp"
+        android:textColor="@color/app_bg"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/toggleTextL"
+        app:layout_constraintTop_toBottomOf="@+id/btnLoginPage" />
+
+    <TextView
+        android:id="@+id/tvOrOptionL"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Or Login With"
+        android:textColor="@color/button_bg"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView6"
+        app:layout_constraintEnd_toEndOf="@+id/btnLoginPage"
+        app:layout_constraintStart_toStartOf="@+id/btnLoginPage"
+        app:layout_constraintTop_toBottomOf="@+id/btnToggleL" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvOrOptionL"
+        app:srcCompat="@drawable/google" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageView7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:srcCompat="@drawable/facebook" />
+
+    <ImageView
+        android:id="@+id/imageView7"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintTop_toTopOf="@+id/imageView4"
+        app:srcCompat="@drawable/github" />
+
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Remember Me"
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".initialActivity"
+    android:background="@color/body_bg"
+    android:padding="30dp"
+    >
+
+
+    <ImageView
+        android:id="@+id/initialImg"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvInitial1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/initial_img2" />
+
+    <TextView
+        android:id="@+id/tvInitial1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto"
+        android:text="Be ready to meet your tutor buddy!"
+        android:textAlignment="center"
+        android:textColor="@color/button_bg"
+        android:textSize="50sp"
+        app:layout_constraintBottom_toTopOf="@+id/initialLogin"
+        app:layout_constraintEnd_toEndOf="@+id/initialImg"
+        app:layout_constraintStart_toStartOf="@+id/initialImg"
+        app:layout_constraintTop_toBottomOf="@+id/initialImg" />
+
+    <Button
+        android:id="@+id/initialLogin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/button_border"
+        android:text="Login"
+        android:textColor="@color/button_bg"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="@+id/tvInitial1"
+        app:layout_constraintStart_toStartOf="@+id/tvInitial1"
+        app:layout_constraintTop_toBottomOf="@+id/tvInitial1" />
+
+    <Button
+        android:id="@+id/initialSignup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="SignUp"
+        android:textSize="18sp"
+        android:textColor="@color/button_bg"
+        android:background="@drawable/button_border"
+
+        app:layout_constraintEnd_toEndOf="@+id/initialLogin"
+        app:layout_constraintStart_toStartOf="@+id/initialLogin"
+        app:layout_constraintTop_toBottomOf="@+id/initialLogin" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
