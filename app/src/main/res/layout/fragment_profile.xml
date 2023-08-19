@@ -187,18 +187,18 @@
                 android:fontFamily="sans-serif"
                 android:text="Programming, Java, Android"
                 android:textSize="18sp" />
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_marginRight="5dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginTop="40dp"
-                android:src="@drawable/wallet"
-                android:tooltipText="Request Payment"
-                />
-
         </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="100dp"
+            android:src="@drawable/wallet"
+            android:tooltipText="Request Payment"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
