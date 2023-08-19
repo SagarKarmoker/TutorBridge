@@ -5,6 +5,7 @@
     <color name="button_bg">#25282B</color>
     <color name="body_bg">#F6F6EF</color>
     <color name="app_bg">#D3F26A</color>
+    <color name="back_button_bg">#43CEFF2B</color>
 
 
     <color name="seed">#D3F26A</color>
