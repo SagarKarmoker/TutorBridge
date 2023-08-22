@@ -102,7 +102,6 @@
                 android:layout_centerInParent="true"
                 android:minEms="17"
                 android:maxEms="17"
-                android:layout_marginRight="4dp"
                 android:hint="Type your problem here"
                 >
 
@@ -116,13 +115,14 @@
 
             <ImageButton
                 android:id="@+id/sendMsg"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:src="@drawable/send_chat"
                 android:background="@color/body_bg"
                 android:layout_alignParentRight="true"
                 android:layout_alignBaseline="@id/chatCard"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="33dp"
+                android:layout_marginLeft="8dp"
                 />
 
         </RelativeLayout>

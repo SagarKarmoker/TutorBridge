@@ -7,57 +7,48 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.cse489.tutorbridge.placeholder.PlaceholderContent.PlaceholderItem;
 import com.cse489.tutorbridge.databinding.FragmentItemBinding;
+import com.cse489.tutorbridge.placeholder.OrderModal;
 
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link PlaceholderItem}.
- * TODO: Replace the implementation with code for your data type.
- */
 public class MyItemRecyclerViewAdapter extends RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder> {
 
-    private final List<PlaceholderItem> mValues;
+    private ArrayList<OrderModal> historyList;
 
-    public MyItemRecyclerViewAdapter(List<PlaceholderItem> items) {
-        mValues = items;
+    public MyItemRecyclerViewAdapter(ArrayList<OrderModal> histories) {
+        this.historyList = histories;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        return new ViewHolder(FragmentItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-
+        FragmentItemBinding binding = FragmentItemBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(binding);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-//        holder.mItem = mValues.get(position);
-//        holder.mIdView.setText(mValues.get(position).id);
-//        holder.mContentView.setText(mValues.get(position).content);
+        OrderModal order = historyList.get(position);
+
+        // Bind your data to the views using data binding
+//        holder.binding.setOrder(order);
+//        holder.binding.executePendingBindings(); // This is important to ensure immediate binding
     }
 
     @Override
     public int getItemCount() {
-        return mValues.size();
+        return historyList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-
-        TextView orderid, orderStatus, orderDate, paymentMethod;
+        private FragmentItemBinding binding; // Use your data binding class here
 
         public ViewHolder(FragmentItemBinding binding) {
             super(binding.getRoot());
-            orderid = binding.orderId;
-            orderStatus = binding.orderStatus;
-            orderDate = binding.orderDate;
-            paymentMethod = binding.paymentMethod;
+            this.binding = binding;
         }
 
-//        @Override
-//        public String toString() {
-//            return super.toString() + " '" + mContentView.getText() + "'";
-//        }
+        // No need for toString() here
     }
 }

@@ -38,7 +38,7 @@
     </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/historyRview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="com.cse489.tutorbridge.ItemFragment"

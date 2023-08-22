@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.circularreveal.cardview.CircularRevealCardView
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp">
+
+            <ImageView
+                android:id="@+id/workImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:src="@drawable/profile"
+                />
+
+            <TextView
+                android:id="@+id/workTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Your Work Title"
+                app:layout_constraintLeft_toRightOf="@id/workImg"
+                app:layout_constraintTop_toTopOf="parent"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <TextView
+                android:id="@+id/workSubTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="sub title (expert in)"
+                app:layout_constraintLeft_toRightOf="@id/workImg"
+                app:layout_constraintTop_toBottomOf="@id/workTitle"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <TextView
+                android:id="@+id/workInstitute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Institute"
+                app:layout_constraintLeft_toRightOf="@id/workImg"
+                app:layout_constraintTop_toBottomOf="@id/workSubTitle"
+                android:textSize="18sp"
+                android:layout_marginLeft="10dp"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/workLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dhaka"
+                app:layout_constraintLeft_toRightOf="@id/workImg"
+                app:layout_constraintTop_toBottomOf="@id/workInstitute"
+                android:textSize="17sp"
+                android:layout_marginLeft="10dp"
+                />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/guideMeBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guide me"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:backgroundTint="@color/colorCustomColor1"
+                app:icon="@drawable/bolt"
+                app:iconGravity="textEnd"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.circularreveal.cardview.CircularRevealCardView>
+
+</LinearLayout>
