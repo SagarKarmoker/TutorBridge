@@ -42,6 +42,8 @@
         <item name="android:statusBarColor">@color/body_bg</item>
         <item name="android:windowLightStatusBar">true</item>
         <item name="background">@color/body_bg</item>
+
+        <item name="fontFamily">@font/roboto</item>
     </style>
     <style name="Theme.TutorBridge" parent="Base.Theme.TutorBridge" />
 </resources>
