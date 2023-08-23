@@ -15,6 +15,7 @@ public class LoginActivity extends AppCompatActivity {
     private ImageView ivBackArrowL;
     private TextView btnToggleL,toggleText,tvTittle,tvPera1,tvUserName,tvPassword;
     private EditText etUserName,etPassword;
+    private Button btnLoginPage;
     public static final String SHARED_PREFS = "sharedPrefs";
 
 
@@ -34,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         tvPassword = findViewById(R.id.tvPassword);
         etUserName = findViewById(R.id.etUserName);
         etPassword = findViewById(R.id.etPassword);
+        btnLoginPage = findViewById(R.id.btnLoginPage);
 
 
 
@@ -46,6 +48,16 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent i4 = new Intent(LoginActivity.this,SignupActivity.class);
+                startActivity(i4);
+
+            }
+        });
+        //go to OTP page
+        btnLoginPage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent i4 = new Intent(LoginActivity.this, phoneNumVerifyActivity.class);
                 startActivity(i4);
 
             }
