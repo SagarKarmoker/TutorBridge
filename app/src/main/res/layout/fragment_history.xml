@@ -37,21 +37,28 @@
 
     </RelativeLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/historyRview"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:lottie_rawRes="@raw/loading"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toBottomOf="@id/historyBar"/>
+
+    <ListView
+        android:id="@+id/historyList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:name="com.cse489.tutorbridge.ItemFragment"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ItemFragment"
-        tools:listitem="@layout/fragment_item"
-        android:layout_marginTop="60dp"
-
+        tools:context=".HistoryFragment"
+        tools:listitem="@layout/history_row"
+        android:layout_marginTop="10dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/historyBar"
         />
 
@@ -64,11 +71,11 @@
 <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
 <!--xmlns:tools="http://schemas.android.com/tools"-->
 <!--android:id="@+id/list"-->
-<!--android:name="com.cse489.tutorbridge.ItemFragment"-->
+<!--android:name="com.cse489.tutorbridge.HistoryFragmentent"-->
 <!--android:layout_width="match_parent"-->
 <!--android:layout_height="match_parent"-->
 <!--android:layout_marginLeft="16dp"-->
 <!--android:layout_marginRight="16dp"-->
 <!--app:layoutManager="LinearLayoutManager"-->
-<!--tools:context=".ItemFragment"-->
+<!--tools:context=".HistoryFragment"-->
 <!--tools:listitem="@layout/fragment_item"/>-->

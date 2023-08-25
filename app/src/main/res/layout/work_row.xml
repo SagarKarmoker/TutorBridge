@@ -57,7 +57,7 @@
                 android:text="Institute"
                 app:layout_constraintLeft_toRightOf="@id/workImg"
                 app:layout_constraintTop_toBottomOf="@id/workSubTitle"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:layout_marginLeft="10dp"
                 android:textStyle="bold"
                 />
@@ -69,14 +69,14 @@
                 android:text="Dhaka"
                 app:layout_constraintLeft_toRightOf="@id/workImg"
                 app:layout_constraintTop_toBottomOf="@id/workInstitute"
-                android:textSize="17sp"
+                android:textSize="12sp"
                 android:layout_marginLeft="10dp"
                 />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/guideMeBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
                 android:text="Guide me"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"

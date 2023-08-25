@@ -63,20 +63,20 @@
                 />
 
             <TextView
-                android:id="@+id/orderCatagory"
+                android:id="@+id/orderCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Catagory: Programming"
-                android:layout_marginLeft="18dp"
+                android:text="Category: Android"
+                android:padding="8dp"
                 android:textColor="@color/colorCustomColor1"
-                android:layout_marginTop="5dp"
                 android:textStyle="bold|italic"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="30dp"
+                android:layout_toRightOf="@id/orderId"
                 android:fontFamily="sans-serif"
                 />
 
             <ImageView
+                android:id="@+id/historyMore"
+                android:focusable="true"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_alignParentEnd="true"

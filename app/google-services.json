@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "634831579868",
+    "project_id": "demotutor-3fb7f",
+    "storage_bucket": "demotutor-3fb7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:634831579868:android:397435225aadc7edc06219",
+        "android_client_info": {
+          "package_name": "com.cse489.tutorbridge"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "634831579868-gldl9mefr5k3264dtddqo0bbq2qseoeg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cse489.tutorbridge",
+            "certificate_hash": "e5ab5d73ad21d359d7d781b0903f776d5024e2df"
+          }
+        },
+        {
+          "client_id": "634831579868-rf8k11rnl9sqimao902rf4vrgph0on3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCCGNZLZd3YcS7UcZWg6driwxZyI70-0jw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "634831579868-rf8k11rnl9sqimao902rf4vrgph0on3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

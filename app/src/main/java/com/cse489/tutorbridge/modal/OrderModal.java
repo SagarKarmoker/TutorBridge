@@ -1,4 +1,4 @@
-package com.cse489.tutorbridge.placeholder;
+package com.cse489.tutorbridge.modal;
 
 public class OrderModal {
     private String orderId, orderStatus, orderDate, paymentMethod, catagory;
