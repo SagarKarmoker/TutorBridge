@@ -1,17 +1,21 @@
 package com.cse489.tutorbridge;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -26,6 +30,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -36,10 +41,10 @@ public class HomeFragment extends Fragment {
     MaterialCardView offerCard;
     ListView workListView;
     ArrayList<MentorProfileClass> mentors;
-
     MentorAdapter adapter;
-
+    ImageView offerImg;
     boolean isScrolling = false;
+    String linkToRe = "";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,6 +62,7 @@ public class HomeFragment extends Fragment {
         userName = view.findViewById(R.id.userName);
         workListView = view.findViewById(R.id.workListView);
         offerCard = view.findViewById(R.id.offerCard);
+        offerImg = view.findViewById(R.id.offerImg);
 
         Context context = view.getContext();
         SharedPreferences pref = context.getSharedPreferences("tutorBride", Context.MODE_PRIVATE);
@@ -90,7 +96,38 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                fetchOfferImg();
+            }
+        });
+
+        offerImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent offer = new Intent(Intent.ACTION_VIEW, Uri.parse(linkToRe));
+                startActivity(offer);
+            }
+        });
+
         return  view;
+    }
+
+    private void fetchOfferImg(){
+        db.collection("offers")
+                .whereEqualTo("isOffer", true)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                        String imgUrl = document.getString("imgUrl");
+                        linkToRe = document.getString("linkToRe");
+                        Picasso.get().load(imgUrl).into(offerImg);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("HomeFragment", "Error fetching mentors: " + e.getMessage());
+                });
     }
 
     private void fetchMentorData() {
