@@ -5,15 +5,15 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public class MentorProfileClass implements Serializable {
-    String mentor, name, email, phone, education, expert, desc, status, location;
-    double price;
+    String mentor, name, email, phone, education, expert, desc, status, location, year;
+    double price, wallet;
 
     public MentorProfileClass(){
 
     }
 
-    public MentorProfileClass(String mentorid, String name, String email, String phone, String education, String expert, String desc, String status, double price, String location) {
-        this.mentor = mentorid;
+    public MentorProfileClass(String mentor, String name, String email, String phone, String education, String expert, String desc, String status, String location, String year, double price, double wallet) {
+        this.mentor = mentor;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -21,8 +21,10 @@ public class MentorProfileClass implements Serializable {
         this.expert = expert;
         this.desc = desc;
         this.status = status;
-        this.price = price;
         this.location = location;
+        this.year = year;
+        this.price = price;
+        this.wallet = wallet;
     }
 
     public String getMentorid() {
@@ -105,6 +107,30 @@ public class MentorProfileClass implements Serializable {
         this.price = price;
     }
 
+    public String getMentor() {
+        return mentor;
+    }
+
+    public void setMentor(String mentor) {
+        this.mentor = mentor;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public double getWallet() {
+        return wallet;
+    }
+
+    public void setWallet(double wallet) {
+        this.wallet = wallet;
+    }
+
     @Override
     public String toString() {
         return "MentorProfileClass{" +
@@ -116,8 +142,10 @@ public class MentorProfileClass implements Serializable {
                 ", expert='" + expert + '\'' +
                 ", desc='" + desc + '\'' +
                 ", status='" + status + '\'' +
-                ", price='" + price + '\'' +
                 ", location='" + location + '\'' +
+                ", year='" + year + '\'' +
+                ", price=" + price +
+                ", wallet=" + wallet +
                 '}';
     }
 }

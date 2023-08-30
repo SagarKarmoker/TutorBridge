@@ -18,28 +18,34 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cse489.tutorbridge.modal.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class SignupActivity extends AppCompatActivity {
     private ImageView ivBackArrow;
-    private TextView btnToggleS,toggleText,tvTittle,tvPera1,tvUserName,tvEmail,tvPassword,tvConfirmPassword;
-    private EditText etUserName,etEmail,etPassword,etConfirmPassword;
+    private TextView btnToggleS, toggleText, tvTittle, tvPera1, tvUserName, tvEmail, tvPassword, tvConfirmPassword;
+    private EditText etUserName, etEmail, etPassword, etConfirmPassword;
     private Button btnSignUpPage;
     private ProgressBar progressBar;
     private static final String TAG = "SignupActivity";
 
-    private String err= "";
+    private String err = "";
+    private FirebaseFirestore db;
 
-
+    CollectionReference userRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,7 @@ public class SignupActivity extends AppCompatActivity {
 
         //initialize find by
         ivBackArrow = findViewById(R.id.ivBackArrow);
-        toggleText =findViewById(R.id.toggleTextL);
+        toggleText = findViewById(R.id.toggleTextL);
         btnToggleS = findViewById(R.id.btnToggleS);
         tvTittle = findViewById(R.id.tvTittle);
         tvPera1 = findViewById(R.id.tvPera1);
@@ -72,12 +78,12 @@ public class SignupActivity extends AppCompatActivity {
                 String password = etPassword.getText().toString();
                 String ConfirmPassword = etConfirmPassword.getText().toString();
 
-                if(TextUtils.isEmpty(name)){
-                    Toast.makeText(SignupActivity.this,"Please enter your full name",Toast.LENGTH_LONG).show();
+                if (TextUtils.isEmpty(name)) {
+                    Toast.makeText(SignupActivity.this, "Please enter your full name", Toast.LENGTH_LONG).show();
                     etUserName.setError("Name is required");
                     etUserName.requestFocus();
-                } else if (name.length()<4 || name.length()>12 || !name.matches("[a-z A-Z]+")) {
-                    Toast.makeText(SignupActivity.this,"Name is invalid",Toast.LENGTH_LONG).show();
+                } else if (name.length() < 4 || name.length() > 12 || !name.matches("[a-z A-Z]+")) {
+                    Toast.makeText(SignupActivity.this, "Name is invalid", Toast.LENGTH_LONG).show();
                     etUserName.setError("Name should have 4-12 letters");
                     etUserName.requestFocus();
                 } else if (TextUtils.isEmpty(email)) {
@@ -92,7 +98,7 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "Please enter your password", Toast.LENGTH_LONG).show();
                     etPassword.setError("Password is required");
                     etPassword.requestFocus();
-                } else if (password.length()<6) {
+                } else if (password.length() < 6) {
                     Toast.makeText(SignupActivity.this, "Password is too small", Toast.LENGTH_LONG).show();
                     etPassword.setError("Password should be at least 6 digits");
                     etPassword.requestFocus();
@@ -104,9 +110,9 @@ public class SignupActivity extends AppCompatActivity {
                     Toast.makeText(SignupActivity.this, "Please Enter the same password", Toast.LENGTH_LONG).show();
                     etConfirmPassword.setError("Password didn't match");
                     etConfirmPassword.requestFocus();
-                } else{
+                } else {
                     progressBar.setVisibility(View.VISIBLE);
-                    registerUser(name,email,password);
+                    registerUser(name, email, password);
                 }
 
 
@@ -118,7 +124,7 @@ public class SignupActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent i2 = new Intent(SignupActivity.this,initialActivity.class);
+                Intent i2 = new Intent(SignupActivity.this, initialActivity.class);
                 startActivity(i2);
 
             }
@@ -128,7 +134,7 @@ public class SignupActivity extends AppCompatActivity {
         btnToggleS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i3 = new Intent(SignupActivity.this,LoginActivity.class);
+                Intent i3 = new Intent(SignupActivity.this, LoginActivity.class);
                 startActivity(i3);
             }
         });
@@ -139,36 +145,41 @@ public class SignupActivity extends AppCompatActivity {
     //register user using given credentials
     private void registerUser(String name, String email, String password) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.createUserWithEmailAndPassword(email,password).addOnCompleteListener(SignupActivity.this,
+        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignupActivity.this,
                 new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(SignupActivity.this,"User SignUp Complete",Toast.LENGTH_LONG).show();
+                        if (task.isSuccessful()) {
+                            Toast.makeText(SignupActivity.this, "User SignUp Complete", Toast.LENGTH_LONG).show();
                             FirebaseUser firebaseUser = auth.getCurrentUser();
+
+                            userRef = db.collection("user_info");
+                            long date = System.currentTimeMillis();
+                            User userObj = new User(auth.getUid(), name, String.valueOf(date), email);
+                            addUserToDB(userObj);
 
                             //send verification email
                             firebaseUser.sendEmailVerification();
 
                             //open user profile after successful signup registration
-                            Intent intent = new Intent(SignupActivity.this,LoginActivity.class);
+                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
                             finish();
-                        } else{
-                            try{
+                        } else {
+                            try {
                                 throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e){
+                            } catch (FirebaseAuthWeakPasswordException e) {
                                 etPassword.setError("Your Password is so weak. Try using mixture of Alphabets and Number and Special character");
                                 etPassword.requestFocus();
-                            } catch (FirebaseAuthUserCollisionException e){
+                            } catch (FirebaseAuthUserCollisionException e) {
                                 etEmail.setError("This email is already registered. Use another email");
                                 etEmail.requestFocus();
                                 progressBar.setVisibility(View.GONE);
                             } catch (Exception e) {
-                                Log.e(TAG,e.getMessage());
-                                Toast.makeText(SignupActivity.this, e.getMessage(),Toast.LENGTH_LONG).show();
+                                Log.e(TAG, e.getMessage());
+                                Toast.makeText(SignupActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                                 progressBar.setVisibility(View.GONE);
                             }
                         }
@@ -178,6 +189,13 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
+    private void addUserToDB(User userObj) {
+        userRef.add(userObj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+            @Override
+            public void onSuccess(DocumentReference documentReference) {
+                //number verify
 
-
+            }
+        });
+    };
 }
