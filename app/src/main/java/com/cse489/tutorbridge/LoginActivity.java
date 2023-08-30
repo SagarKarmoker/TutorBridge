@@ -36,18 +36,14 @@ public class LoginActivity extends AppCompatActivity {
         etUserName = findViewById(R.id.etUserName);
         etPassword = findViewById(R.id.etPassword);
         btnLoginPage = findViewById(R.id.btnLoginPage);
-
-
-
-
-
+        
 
         //Go to signup page
         ivBackArrowL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent i4 = new Intent(LoginActivity.this,SignupActivity.class);
+                Intent i4 = new Intent(LoginActivity.this,initialActivity.class);
                 startActivity(i4);
 
             }

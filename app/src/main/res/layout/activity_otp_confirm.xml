@@ -121,9 +121,44 @@
         android:inputType="number"
         android:textColor="@color/button_bg"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/etOTP5"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/etOTP3"
+        app:layout_constraintTop_toTopOf="@+id/etOTP1" />
+
+    <EditText
+        android:id="@+id/etOTP5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/otp_field"
+        android:elevation="8dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="1"
+        android:inputType="number"
+        android:textColor="@color/button_bg"
+        android:textSize="20sp"
+
+        app:layout_constraintEnd_toStartOf="@+id/etOTP6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/etOTP4"
+        app:layout_constraintTop_toTopOf="@+id/etOTP1" />
+
+    <EditText
+        android:id="@+id/etOTP6"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/otp_field"
+        android:elevation="8dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="1"
+        android:inputType="number"
+        android:textColor="@color/button_bg"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/etOTP5"
         app:layout_constraintTop_toTopOf="@+id/etOTP1" />
 
     <ImageView
