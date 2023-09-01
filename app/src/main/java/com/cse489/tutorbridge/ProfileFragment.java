@@ -1,5 +1,7 @@
 package com.cse489.tutorbridge;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -112,6 +114,7 @@ public class ProfileFragment extends Fragment {
         walletBtn.setVisibility(View.GONE);
         editProfileBtn.setVisibility(View.GONE);
 
+        SharedPreferences pref = context.getSharedPreferences("TutorBride", Context.MODE_PRIVATE);
 
         new Handler().post(new Runnable() {
             @Override
@@ -138,6 +141,9 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        if(!pref.getBoolean("isMentor", false)){
+            walletBtn.setVisibility(View.GONE);
+        }
         walletBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,7 +221,7 @@ public class ProfileFragment extends Fragment {
                         Log.d("GotData", "DocumentSnapshot data: " + document.getData());
 
                         //saving in local
-                        SharedPreferences pref = context.getSharedPreferences("tutorBride", Context.MODE_PRIVATE);
+                        SharedPreferences pref = context.getSharedPreferences("tutorBride", MODE_PRIVATE);
                         SharedPreferences.Editor editor = pref.edit();
                         editor.putString("Name", document.getString("name"));
                         editor.apply();

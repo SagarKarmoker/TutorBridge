@@ -83,7 +83,7 @@ public class MentorProfile extends AppCompatActivity {
             }
         });
 
-        jobMentorID.setText("MentorID: "+mentor.getMentorid());
+        jobMentorID.setText("MentorID: "+mentor.getMentor());
         tutorName.setText(mentor.getName());
         tutorLocation.setText(mentor.getLocation());
         expYears.setText(mentor.getYear() + " years");
@@ -96,8 +96,8 @@ public class MentorProfile extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     Intent i = new Intent(MentorProfile.this, PaymentActivity.class);
-                    i.putExtra("mentorId", mentor.getMentorid());
-                    i.putExtra("userId", mentor.getMentorid()); //todo update userid
+                    i.putExtra("mentorId", mentor.getMentor());
+                    i.putExtra("userId", mentor.getMentor()); //todo update userid
                     i.putExtra("mentorSalary", mentor.getPrice());
                     System.out.println(orderIdGen());
                     i.putExtra("orderId", orderIdGen());

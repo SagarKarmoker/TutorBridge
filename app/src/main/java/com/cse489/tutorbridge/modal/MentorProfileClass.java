@@ -1,19 +1,18 @@
 package com.cse489.tutorbridge.modal;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class MentorProfileClass implements Serializable {
-    String mentor, name, email, phone, education, expert, desc, status, location, year;
+    String uuid, mentorid, name, email, phone, education, expert, desc, status, location, year, date;
     double price, wallet;
 
     public MentorProfileClass(){
 
     }
 
-    public MentorProfileClass(String mentor, String name, String email, String phone, String education, String expert, String desc, String status, String location, String year, double price, double wallet) {
-        this.mentor = mentor;
+    public MentorProfileClass(String uuid, String mentor, String name, String email, String phone, String education, String expert, String desc, String status, String location, String year, String date, double price, double wallet) {
+        this.uuid = uuid;
+        this.mentorid = mentor;
         this.name = name;
         this.email = email;
         this.phone = phone;
@@ -25,14 +24,23 @@ public class MentorProfileClass implements Serializable {
         this.year = year;
         this.price = price;
         this.wallet = wallet;
+        this.date = date;
     }
 
-    public String getMentorid() {
-        return mentor;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setMentorid(String mentorid) {
-        this.mentor = mentorid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getMentor() {
+        return mentorid;
+    }
+
+    public void setMentor(String mentorid) {
+        this.mentorid = mentorid;
     }
 
     public String getName() {
@@ -107,14 +115,6 @@ public class MentorProfileClass implements Serializable {
         this.price = price;
     }
 
-    public String getMentor() {
-        return mentor;
-    }
-
-    public void setMentor(String mentor) {
-        this.mentor = mentor;
-    }
-
     public String getYear() {
         return year;
     }
@@ -131,10 +131,19 @@ public class MentorProfileClass implements Serializable {
         this.wallet = wallet;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public String toString() {
         return "MentorProfileClass{" +
-                "mentor='" + mentor + '\'' +
+                "uuid='" + uuid + '\'' +
+                ", mentorid='" + mentorid + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
@@ -144,6 +153,7 @@ public class MentorProfileClass implements Serializable {
                 ", status='" + status + '\'' +
                 ", location='" + location + '\'' +
                 ", year='" + year + '\'' +
+                ", date='" + date + '\'' +
                 ", price=" + price +
                 ", wallet=" + wallet +
                 '}';

@@ -1,6 +1,7 @@
 package com.cse489.tutorbridge;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -8,20 +9,46 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.cse489.tutorbridge.chat.ChatMainActivity;
+import com.cse489.tutorbridge.modal.MentorProfileClass;
+import com.cse489.tutorbridge.modal.User;
 import com.cse489.tutorbridge.chat.char_history_activity;
 import com.cse489.tutorbridge.utility.NetworkChangeListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class DashboardActivity extends AppCompatActivity{
     LottieAnimationView connectCheck;
@@ -31,11 +58,22 @@ public class DashboardActivity extends AppCompatActivity{
     NetworkChangeListener networkChangeListener;
     FrameLayout fragment_container;
 
+    FirebaseFirestore db;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor edit;
+    FirebaseAuth auth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
+
+        db = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        preferences = this.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        edit = preferences.edit();
 
         navBar = findViewById(R.id.bottom_navigation);
         connectCheck = findViewById(R.id.connectCheck);
@@ -83,6 +121,49 @@ public class DashboardActivity extends AppCompatActivity{
                 return false; // Return false if no fragment was selected
             }
         });
+
+
+        DocumentReference ref = db.collection("mentor").document(Objects.requireNonNull(auth.getCurrentUser()).getUid());
+        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                assert value != null;
+                System.out.println(value.getString("uuid"));
+            }
+        });
+
+        String docPath = preferences.getString("docPath", "");
+        Log.d("DOCPAth", docPath);
+
+        // Query "mentor_list" collection
+        db.collection("mentor_list")
+                .whereEqualTo("uuid", docPath)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // If the document is found in "mentor_list" collection
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                MentorProfileClass mentor = document.toObject(MentorProfileClass.class); //todo got data
+                                System.out.println(mentor.getUuid());
+                                System.out.println(mentor.toString());
+                                edit.putBoolean("isMentor", true);
+                                edit.apply();
+                            }
+                        } else {
+                            // Document not found in "mentor_list" collection
+                            // Check the "user_info" collection
+                            checkUserInfoCollection(docPath);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure
+                    }
+                });
+
     }
 
     @Override
@@ -98,4 +179,37 @@ public class DashboardActivity extends AppCompatActivity{
         super.onStop();
     }
 
+    // Function to check "user_info" collection if document is not found in "mentor_list"
+    private void checkUserInfoCollection(String docPath) {
+        db.collection("user_info")
+                .whereEqualTo("uuid", docPath)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // If the document is found in "user_info" collection
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                // Access document data using document.getData()
+                                Map<String, Object> data = document.getData();
+                                // Access specific fields in the document
+                                String name = (String) data.get("name");
+                                String uuid = (String) data.get("uuid");
+                                String date = (String) data.get("date");
+                                edit.putBoolean("isMentor", false);
+                                edit.apply();
+                                System.out.println("Found in user_info: " + name + uuid + date);
+                            }
+                        } else {
+                            // Document not found in "user_info" collection either
+                            System.out.println("Document not found in user_info collection.");
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure
+                    }
+                });
+    }
 }

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -12,6 +13,8 @@ import android.widget.ProgressBar;
 public class initialActivity extends AppCompatActivity {
     private Button initialSignup,initialLogin;
     private ProgressBar progressBar;
+    SharedPreferences preferences;
+    SharedPreferences.Editor edit;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -44,5 +47,15 @@ public class initialActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.GONE);
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        preferences = this.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        if (preferences.getBoolean("TutorIsLoggedIn", false)){
+            Intent i = new Intent(initialActivity.this, DashboardActivity.class);
+            startActivity(i);
+        }
     }
 }

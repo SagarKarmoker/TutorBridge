@@ -1,6 +1,7 @@
 package com.cse489.tutorbridge.modal;
 
 public class User {
+    //different constractor for user and mentor
     String uuid, name, date, email;
     public User(){
 
@@ -10,6 +11,12 @@ public class User {
         this.name = name;
         this.date = date;
         this.email = email;
+    }
+
+    public User(String uuid, String name, String date){
+        this.uuid = uuid;
+        this.name = name;
+        this.date = date;
     }
 
     public String getUuid() {
@@ -34,5 +41,15 @@ public class User {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", date='" + date + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }

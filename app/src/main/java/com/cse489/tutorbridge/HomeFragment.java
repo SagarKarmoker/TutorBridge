@@ -139,7 +139,7 @@ public class HomeFragment extends Fragment {
                     for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                         MentorProfileClass mentor = document.toObject(MentorProfileClass.class);
                         System.out.println(document.getString("mentor"));
-                        mentor.setMentorid(document.getString("mentor"));
+                        mentor.setMentor(document.getString("mentor"));
                         mentors.add(mentor);
                         System.out.println(mentor.toString());
                     }

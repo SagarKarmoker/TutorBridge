@@ -140,6 +140,16 @@
         app:layout_constraintStart_toStartOf="@+id/tvConfirmPassword"
         app:layout_constraintTop_toBottomOf="@+id/tvConfirmPassword" />
 
+    <CheckBox
+        android:id="@+id/mentorCheck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Signup As Mentor (Verification Required)"
+        app:layout_constraintStart_toStartOf="@+id/etConfirmPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword"
+
+        />
+
     <!--    signup Button section-->
     <Button
         android:id="@+id/btnSignUpPage"
@@ -153,7 +163,7 @@
 
         app:layout_constraintEnd_toEndOf="@+id/etConfirmPassword"
         app:layout_constraintStart_toStartOf="@+id/etConfirmPassword"
-        app:layout_constraintTop_toBottomOf="@+id/etConfirmPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/mentorCheck" />
 
     <!--    toggle section-->
     <TextView

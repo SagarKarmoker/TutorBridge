@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Patterns;
@@ -30,7 +31,8 @@ public class LoginActivity extends AppCompatActivity {
     private ProgressBar progressBar;
     private FirebaseAuth authProfile;
 
-
+    SharedPreferences preferences;
+    SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,9 @@ public class LoginActivity extends AppCompatActivity {
 
         authProfile = FirebaseAuth.getInstance();
 
-        
+        preferences = this.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        edit = preferences.edit();
+
 
         //Go to signup page
         ivBackArrowL.setOnClickListener(new View.OnClickListener() {
@@ -106,8 +110,11 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(LoginActivity.this,"You are loged in now",Toast.LENGTH_SHORT).show();
-                    Intent i4 = new Intent(LoginActivity.this, phoneNumVerifyActivity.class);
+                    Toast.makeText(LoginActivity.this,"You are logged in now",Toast.LENGTH_SHORT).show();
+                    edit.putString("docPath", authProfile.getUid());
+                    edit.putBoolean("TutorIsLoggedIn", true);
+                    edit.apply();
+                    Intent i4 = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(i4);
                 }
                 else {
