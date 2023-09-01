@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +22,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -29,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
     public static final String SHARED_PREFS = "sharedPrefs";
     private ProgressBar progressBar;
     private FirebaseAuth authProfile;
+    private static final String TAG = "LoginActivity";
+    private  ImageView viewPass;
 
 
 
@@ -51,6 +58,25 @@ public class LoginActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         authProfile = FirebaseAuth.getInstance();
+
+        //password hide or show
+        viewPass = findViewById(R.id.viewPass);
+        viewPass.setImageResource(R.drawable.icon_hide);
+        viewPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etPassword.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
+                    // If password is visible then Hide it
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    // Change Icon
+                    viewPass.setImageResource(R.drawable.icon_hide);
+                } else {
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    viewPass.setImageResource(R.drawable.icon_visible);
+                }
+            }
+        });
+
 
         
 
@@ -106,16 +132,44 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    Toast.makeText(LoginActivity.this,"You are loged in now",Toast.LENGTH_SHORT).show();
-                    Intent i4 = new Intent(LoginActivity.this, phoneNumVerifyActivity.class);
+                    Toast.makeText(LoginActivity.this,"You are logged in now",Toast.LENGTH_SHORT).show();
+                    Intent i4 = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(i4);
                 }
                 else {
-                    Toast.makeText(LoginActivity.this,"Enter a valid Email!",Toast.LENGTH_SHORT).show();
+                    try {
+                        throw task.getException();
+                    } catch (FirebaseAuthInvalidUserException e){
+                        etEmail.setError("User Doesn't Exist. Please signup again. ");
+                        etEmail.requestFocus();
+                    } catch (FirebaseAuthInvalidCredentialsException e){
+                        etEmail.setError("Invalid credentials check again");
+                        etEmail.requestFocus();
+                    } catch (Exception e){
+                        Log.e(TAG,e.getMessage());
+                        Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                    }
+
                 }
                 progressBar.setVisibility(View.GONE);
             }
         });
     }
-    
+
+    //Check if User is already logged in.
+    /*@Override
+    protected void onStart() {
+        super.onStart();
+        if (authProfile.getCurrentUser() != null) {
+            Toast.makeText(LoginActivity.this, "Already Logged In", Toast.LENGTH_LONG);
+            // Start the UserProfileActivity
+            Intent i5 = new Intent(LoginActivity.this, DashboardActivity.class);
+            startActivity(i5);
+            finish();
+
+        } else {
+            Toast.makeText(LoginActivity.this, "Already Logged In", Toast.LENGTH_SHORT);
+        }
+    }*/
+
 }
