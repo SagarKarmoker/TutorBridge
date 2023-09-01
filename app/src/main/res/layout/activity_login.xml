@@ -44,28 +44,28 @@
 
     <!--    user name section-->
     <TextView
-        android:id="@+id/tvUserName"
+        android:id="@+id/tvEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="User Name :"
+        android:text="Email :"
         android:textColor="@color/button_bg"
         android:textSize="16dp"
         app:layout_constraintStart_toStartOf="@+id/tvPera1"
         app:layout_constraintTop_toBottomOf="@+id/tvPera1" />
 
     <EditText
-        android:id="@+id/etUserName"
+        android:id="@+id/etEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_edit_text"
         android:ems="10"
-        android:hint="Name"
+        android:hint="Email"
         android:inputType="text"
         android:padding="10dp"
         android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="@+id/tvUserName"
-        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+        app:layout_constraintStart_toStartOf="@+id/tvEmail"
+        app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
 
 
     <!--    password section-->
@@ -77,8 +77,8 @@
         android:text="Password :"
         android:textColor="@color/button_bg"
         android:textSize="16dp"
-        app:layout_constraintStart_toStartOf="@+id/etUserName"
-        app:layout_constraintTop_toBottomOf="@+id/etUserName" />
+        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
 
     <EditText
         android:id="@+id/etPassword"
@@ -185,5 +185,19 @@
         android:text="Remember Me"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ProgressBar>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
