@@ -15,6 +15,7 @@ import android.widget.ListView;
 import com.airbnb.lottie.LottieAnimationView;
 import com.cse489.tutorbridge.adapters.HistoryAdapter;
 import com.cse489.tutorbridge.modal.HistoryClass;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -29,12 +30,14 @@ public class HistoryFragment extends Fragment {
     HistoryAdapter adapter;
     ListView historyList;
     LottieAnimationView progressBar;
+    FirebaseAuth auth;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance(); // Initialize db object
         histories = new ArrayList<>(); // Initialize mentors list
+        auth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -72,6 +75,7 @@ public class HistoryFragment extends Fragment {
 
     private void fetchMentorData() {
         db.collection("doubt_history")
+                .whereEqualTo("user", auth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     histories.clear(); // Clear existing data

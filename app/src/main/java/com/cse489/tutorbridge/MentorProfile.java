@@ -96,9 +96,10 @@ public class MentorProfile extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     Intent i = new Intent(MentorProfile.this, PaymentActivity.class);
-                    i.putExtra("mentorId", mentor.getMentor());
-                    i.putExtra("userId", mentor.getMentor()); //todo update userid
+                    i.putExtra("mentorId", mentor.getUuid());
+                    i.putExtra("userId", mentor.getUuid()); //todo update userid
                     i.putExtra("mentorSalary", mentor.getPrice());
+                    i.putExtra("mentorCategory", mentor.getExpert());
                     System.out.println(orderIdGen());
                     i.putExtra("orderId", orderIdGen());
                     startActivity(i);

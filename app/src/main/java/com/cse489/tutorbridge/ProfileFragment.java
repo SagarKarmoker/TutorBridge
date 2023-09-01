@@ -33,6 +33,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.cse489.tutorbridge.modal.MentorProfileClass;
+import com.cse489.tutorbridge.modal.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -44,6 +46,7 @@ import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.progressindicator.LinearProgressIndicator;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,8 +55,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 
 public class ProfileFragment extends Fragment {
     LinearLayout proLay;
@@ -76,6 +82,8 @@ public class ProfileFragment extends Fragment {
     Handler handler;
     private double curBalance = 0;
 
+    FirebaseAuth auth;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +99,7 @@ public class ProfileFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
+        auth = FirebaseAuth.getInstance();
         imageRef = storageRef.child("mentors/profile.png");
 
         progressBar = view.findViewById(R.id.progressBar);
@@ -114,13 +123,59 @@ public class ProfileFragment extends Fragment {
         walletBtn.setVisibility(View.GONE);
         editProfileBtn.setVisibility(View.GONE);
 
-        SharedPreferences pref = context.getSharedPreferences("TutorBride", Context.MODE_PRIVATE);
+        SharedPreferences pref = context.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        String json = pref.getString("CurrentUser", "");
+        boolean isMentor = pref.getBoolean("isMentor", false);
+        //System.out.println("Profile" + isMentor);
+        Gson gson = new Gson();
+
+        try {
+            if(isMentor){
+                MentorProfileClass currentUser = gson.fromJson(json, MentorProfileClass.class);
+                System.out.println("Profile "+ currentUser.toString());
+
+                userName.setText("User ID: " + currentUser.getUuid());
+                proName.setText(currentUser.getName());
+                proEmail.setText(currentUser.getEmail());
+                proMobile.setText(currentUser.getPhone());
+                proEdu.setText(currentUser.getEducation());
+                proExp.setText(currentUser.getExpert());
+                proStatus.setText("Status: " + currentUser.getStatus());
+                String s = currentUser.getStatus();
+                assert s != null;
+                if(s.equals("Unverified")){
+                    int colorValue = Color.parseColor("#FFB4AB");
+                    verifiedCard.setCardBackgroundColor(colorValue);
+                }
+                curBalance = currentUser.getWallet();
+
+            }
+            else {
+                User currentUser = gson.fromJson(json, User.class);
+                System.out.println("Profile "+ currentUser.toString());
+                userName.setText("User ID: " + currentUser.getName());
+                proName.setText(currentUser.getName());
+                proEmail.setText(currentUser.getEmail());
+//                proMobile.setText(currentUser.getPhone());
+//                proEdu.setText(currentUser.getEducation());
+//                proExp.setText(currentUser.getExpert());
+//                proStatus.setText("Status: " + currentUser.getStatus());
+//                String s = currentUser.getStatus();
+//                assert s != null;
+//                if(s.equals("Unverified")){
+//                    int colorValue = Color.parseColor("#FFB4AB");
+//                    verifiedCard.setCardBackgroundColor(colorValue);
+//                }
+//                curBalance = currentUser.getWallet();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         new Handler().post(new Runnable() {
             @Override
             public void run() {
                 //TODO fix user hardcoded
-                docRef = db.collection("mentor_list").document("XPyCnt3KehThLKSa87uG");
                 fetchData(context);
 
                 //image retrive
@@ -212,42 +267,28 @@ public class ProfileFragment extends Fragment {
     }
 
     private void fetchData(Context context){
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d("GotData", "DocumentSnapshot data: " + document.getData());
+        db.collection("mentor_list")
+                .whereEqualTo("uuid", auth.getCurrentUser().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            // Access the document path (Firestore reference)
+                            String documentPath = document.getReference().getPath();
+                            Log.d("Document Path", documentPath);
 
-                        //saving in local
-                        SharedPreferences pref = context.getSharedPreferences("tutorBride", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = pref.edit();
-                        editor.putString("Name", document.getString("name"));
-                        editor.apply();
 
-                        userName.setText("User ID: " + document.getString("mentor"));
-                        proName.setText(document.getString("name"));
-                        proEmail.setText(document.getString("email"));
-                        proMobile.setText(document.getString("phone"));
-                        proEdu.setText(document.getString("education"));
-                        proExp.setText(document.getString("expert"));
-                        proStatus.setText("Status: " + document.getString("status"));
-                        String s = document.getString("status");
-                        assert s != null;
-                        if(s.equals("Unverified")){
-                            int colorValue = Color.parseColor("#FFB4AB");
-                            verifiedCard.setCardBackgroundColor(colorValue);
+
+                            // Now, you have the document path for the document matching the UUID
                         }
-                        curBalance = document.getDouble("wallet");
-
-                    } else {
-                        Log.d("NoData", "No such document");
                     }
-                } else {
-                    Log.d("No data", "get failed with ", task.getException());
-                }
-            }
-        });
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure
+                    }
+                });
     }
 }

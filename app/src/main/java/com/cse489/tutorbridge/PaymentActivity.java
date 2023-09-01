@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import com.cse489.tutorbridge.chat.ChatMainActivity;
 import com.cse489.tutorbridge.modal.HistoryClass;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -11,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -19,6 +22,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cse489.tutorbridge.modal.OrderModal;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.razorpay.Checkout;
 import com.razorpay.ExternalWalletListener;
 import com.razorpay.PaymentData;
@@ -33,13 +42,15 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
     private AlertDialog.Builder alertDialogBuilder;
     double salary=0;
     String mentorId="";
-    String userId, orderId = "";
+    String userId, orderId, category = "";
     TextView orderIdPayment, orderValue;
+    FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
+        db = FirebaseFirestore.getInstance();
 
         Intent i = getIntent();
 
@@ -47,6 +58,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
         mentorId = i.getStringExtra("mentorId");
         userId = i.getStringExtra("userId");
         orderId = i.getStringExtra("orderId");
+        category = i.getStringExtra("mentorCategory");
 
         orderIdPayment = findViewById(R.id.orderIdPayment);
         orderValue = findViewById(R.id.orderValue);
@@ -165,6 +177,27 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
         try{
             //alertDialogBuilder.setMessage("Payment Successful :\nPayment ID: "+s+"\nPayment Data: "+paymentData.getData());
             //alertDialogBuilder.show();
+
+//            String orderId, String orderStatus, String orderDate, String paymentMethod, String catagory
+            String date = "";
+            OrderModal order = new OrderModal(orderId, "Paid", date, "Visa/MasterCard", category);
+
+
+            CollectionReference ordersCollection = db.collection("doubt_history"); // Replace "orders" with your collection name
+            ordersCollection.add(order)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(PaymentActivity.this, "Your Payment Is Done", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(PaymentActivity.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
             Intent i = new Intent(PaymentActivity.this, ChatMainActivity.class);
             i.putExtra("mentorid", mentorId);
             i.putExtra("userid", userId);
