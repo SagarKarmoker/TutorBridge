@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.airbnb.lottie.LottieAnimationView;
+import com.cse489.tutorbridge.chat.ChatMainActivity;
+import com.cse489.tutorbridge.chat.char_history_activity;
 import com.cse489.tutorbridge.utility.NetworkChangeListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -60,7 +62,9 @@ public class DashboardActivity extends AppCompatActivity{
                     selectedFragment = new HomeFragment();
                 }
                 if(R.id.chat == item.getItemId()){
-                    selectedFragment = new ChatPageFragment(); //update it new ChatFragment()
+                    //selectedFragment = new ChatPageFragment(); //update it new ChatFragment()
+                    Intent i = new Intent(DashboardActivity.this, char_history_activity.class);
+                    startActivity(i);
                 }
                 if(R.id.history == item.getItemId()){
                     selectedFragment = new HistoryFragment();

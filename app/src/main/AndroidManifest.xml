@@ -76,6 +76,15 @@
         <activity
             android:name=".OtpConfirmActivity"
             android:exported="true" />
+
+        <activity
+            android:name=".chat.ChatMainActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".chat.char_history_activity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

@@ -3,10 +3,13 @@ package com.cse489.tutorbridge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +21,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.Random;
+
 public class MentorProfile extends AppCompatActivity {
 
     TextView jobMentorID, tutorName, tutorLocation, expYears, expSalary, tvJobDes, tvQualificationDes;
@@ -28,6 +33,8 @@ public class MentorProfile extends AppCompatActivity {
     StorageReference imageRef;
 
     ImageView profilePic;
+    Button hireBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +52,7 @@ public class MentorProfile extends AppCompatActivity {
         tvJobDes = findViewById(R.id.tvJobDes);
         tvQualificationDes = findViewById(R.id.tvQualificationDes);
         profilePic = findViewById(R.id.profilePic);
+        hireBtn = findViewById(R.id.hireBtn);
 
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
@@ -82,5 +90,32 @@ public class MentorProfile extends AppCompatActivity {
         expSalary.setText( "Starting from ৳" + String.valueOf(mentor.getPrice()));
         tvJobDes.setText(mentor.getExpert());
         tvQualificationDes.setText(mentor.getEducation());
+
+        hireBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent i = new Intent(MentorProfile.this, PaymentActivity.class);
+                    i.putExtra("mentorId", mentor.getMentorid());
+                    i.putExtra("userId", mentor.getMentorid()); //todo update userid
+                    i.putExtra("mentorSalary", mentor.getPrice());
+                    System.out.println(orderIdGen());
+                    i.putExtra("orderId", orderIdGen());
+                    startActivity(i);
+                }
+                catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+
+    private String orderIdGen(){
+        Random random = new Random();
+        // Generate a random 5-digit number
+        int min = 10000;  // Minimum 5-digit number
+        int max = 99999;  // Maximum 5-digit number
+        return String.valueOf(random.nextInt(max - min + 1) + min);
     }
 }

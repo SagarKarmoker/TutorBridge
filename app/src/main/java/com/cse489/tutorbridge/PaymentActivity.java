@@ -2,6 +2,7 @@ package com.cse489.tutorbridge;
 
 import android.os.Bundle;
 
+import com.cse489.tutorbridge.chat.ChatMainActivity;
 import com.cse489.tutorbridge.modal.HistoryClass;
 import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
@@ -30,15 +31,33 @@ import org.w3c.dom.Text;
 public class PaymentActivity extends AppCompatActivity implements PaymentResultWithDataListener{
     private static final String TAG = PaymentActivity.class.getSimpleName();
     private AlertDialog.Builder alertDialogBuilder;
+    double salary=0;
+    String mentorId="";
+    String userId, orderId = "";
+    TextView orderIdPayment, orderValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
-        HistoryClass history = (HistoryClass) getIntent().getSerializableExtra("order");
-        assert history != null;
-        System.out.println(history.toString());
+        Intent i = getIntent();
+
+        salary = i.getDoubleExtra("mentorSalary", 0);
+        mentorId = i.getStringExtra("mentorId");
+        userId = i.getStringExtra("userId");
+        orderId = i.getStringExtra("orderId");
+
+        orderIdPayment = findViewById(R.id.orderIdPayment);
+        orderValue = findViewById(R.id.orderValue);
+
+        orderIdPayment.setText("Order #"+ orderId);
+        orderValue.setText("BDT "+ salary);
+
+
+        //HistoryClass history = (HistoryClass) getIntent().getSerializableExtra("order");
+        //assert history != null;
+        //System.out.println(history.toString());
 
 
         /*
@@ -110,8 +129,9 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
                 options.put("allow_rotation", true);
                 //You can omit the image option to fetch the image from dashboard
                 options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-                options.put("currency", "BDT");
-                options.put("amount", "100");
+                options.put("currency", "INR");
+                String val = String.valueOf(salary*100);
+                options.put("amount",val);
 
                 JSONObject preFill = new JSONObject();
                 preFill.put("email", "test@razorpay.com");
@@ -143,8 +163,12 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
 
     public void onPaymentSuccess(String s, PaymentData paymentData) {
         try{
-            alertDialogBuilder.setMessage("Payment Successful :\nPayment ID: "+s+"\nPayment Data: "+paymentData.getData());
-            alertDialogBuilder.show();
+            //alertDialogBuilder.setMessage("Payment Successful :\nPayment ID: "+s+"\nPayment Data: "+paymentData.getData());
+            //alertDialogBuilder.show();
+            Intent i = new Intent(PaymentActivity.this, ChatMainActivity.class);
+            i.putExtra("mentorid", mentorId);
+            i.putExtra("userid", userId);
+            startActivity(i);
         }catch (Exception e){
             e.printStackTrace();
         }

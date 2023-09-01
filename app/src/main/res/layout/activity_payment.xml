@@ -13,7 +13,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
             android:orientation="vertical">
 
@@ -29,6 +32,7 @@
                     android:gravity="center">
 
                     <TextView
+                        android:id="@+id/orderIdPayment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="35dp"
@@ -43,7 +47,7 @@
                     android:layout_height="60dp"
                     android:layout_centerHorizontal="true"
                     android:background="#FFFFFF"
-                     />
+                    android:src="@drawable/ic_launcher_foreground" />
 
             </RelativeLayout>
 
@@ -61,16 +65,17 @@
                     android:layout_gravity="center_horizontal"
                     android:paddingTop="0dp"
                     android:paddingBottom="5dp"
-                    android:text="Razorpay T-Shirt"
+                    android:text="TutorBridge Payment"
                     android:textSize="20sp" />
 
                 <TextView
+                    android:id="@+id/orderValue"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:paddingTop="0dp"
                     android:paddingBottom="0dp"
-                    android:text="INR 1.00"
+                    android:text="BDT 1.00"
                     android:textSize="12sp" />
 
                 <TextView
@@ -106,18 +111,18 @@
                     android:id="@+id/et_api_key"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="API Key"
                     android:layout_margin="5dp"
-                    />
+                    android:hint="API Key"
+                    android:visibility="gone" />
 
                 <EditText
                     android:id="@+id/et_custom_options"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:hint="Custom Options"
                     android:lines="10"
-                    android:layout_margin="5dp"
-                    />
+                    android:visibility="gone" />
 
                 <Button
                     android:id="@+id/btn_pay"
