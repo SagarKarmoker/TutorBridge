@@ -1,6 +1,7 @@
 package com.cse489.tutorbridge.chat;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +37,7 @@ public class char_history_activity extends AppCompatActivity {
     String UserID1 = ""; // suppose I am login in userId1
     FirebaseAuth auth;
     FirebaseFirestore db;
+    SharedPreferences pref;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class char_history_activity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         UserID1 = auth.getCurrentUser().getUid();
+        pref = this.getSharedPreferences("TutorBridge", MODE_PRIVATE);
 
         Listview = findViewById(R.id.listview);
         chatroomId = new ArrayList<>();
@@ -95,7 +98,14 @@ public class char_history_activity extends AppCompatActivity {
                     }
                 }
                 System.out.println(participantUserIds.size());
-                fetchAndAdapt(participantUserIds);
+                boolean isMentor = pref.getBoolean("isMentor", false);
+                if(isMentor){
+                    fetchAndAdaptMentor(participantUserIds);
+                }
+                else {
+                    fetchAndAdaptUser(participantUserIds);
+                }
+
             }
 
             @Override
@@ -105,9 +115,48 @@ public class char_history_activity extends AppCompatActivity {
         });
     }
 
-    private void fetchAndAdapt(ArrayList<String> participantUserIds) {
+    private void fetchAndAdaptMentor(ArrayList<String> participantUserIds) {
         // Define your Firestore collection reference
         CollectionReference userRef = db.collection("mentor_list"); // Change to "user_info"
+
+        // Clear the userList if needed
+        userList.clear();
+
+        // Iterate over the userIds and query Firestore
+        for (String userId : participantUserIds) {
+            userRef
+                    .whereEqualTo("uuid", userId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                // Access document data using document.getData()
+                                String username = document.getString("name");
+                                String email = document.getString("email");
+                                User user = new User(username, email);
+                                System.out.println(username + email);
+                                userList.add(user);
+                            }
+
+                            // Update the UI after fetching data
+                            ListAdapter adapter = new ListAdapter(char_history_activity.this, userList);
+                            Listview.setAdapter(adapter);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure
+                        }
+                    });
+        }
+    }
+
+
+    private void fetchAndAdaptUser(ArrayList<String> participantUserIds) {
+        // Define your Firestore collection reference
+        CollectionReference userRef = db.collection("user_info"); // Change to "user_info"
 
         // Clear the userList if needed
         userList.clear();

@@ -37,6 +37,7 @@ public class ChatMainActivity extends AppCompatActivity {
     List<Message> massageList;
     ListView Listview;
     Button send;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,54 +46,48 @@ public class ChatMainActivity extends AppCompatActivity {
         Intent i = getIntent();
         UserID1 = i.getStringExtra("mentorid");
         UserID2 = i.getStringExtra("userid");
-        Log.d("User INFO", UserID1+ " " + UserID2);
-
+        Log.d("User INFO", UserID1 + " " + UserID2);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         rootNode = database.getReference();
-        dummy_user_name=findViewById(R.id.user_name);
-        massageEd=findViewById(R.id.message_edit_text);
-        massageList=new ArrayList<>();
-        Listview=findViewById(R.id.msg_list_view);
+        dummy_user_name = findViewById(R.id.user_name);
+        massageEd = findViewById(R.id.message_edit_text);
+        massageList = new ArrayList<>();
+        Listview = findViewById(R.id.msg_list_view);
         Listview.setDivider(null); // Remove the divider
         Listview.setDividerHeight(0);
-        send=findViewById(R.id.send_button);
+        send = findViewById(R.id.send_button);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String massage=massageEd.getText().toString();
-                if (!massage.isEmpty()){
-                    sentMassage(massage,UserID2);
+                String massage = massageEd.getText().toString();
+                if (!massage.isEmpty()) {
+                    sentMassage(massage, UserID2);
                 }
                 massageEd.setText("");
             }
         });
-        //chatroomkey= generateChatRoomKey(UserID1,UserID2);//call for generated chatroom id when two user start conversation for first time
-        //createChatRoom(chatroomkey,"hi",UserID1,UserID2,UserID1);//call when newly two user start conversation for first time
 
-        //createUser("Arifin","arifinzaman1010@gmail.com");//call when  user sign up
-
-        try {
-            if(!UserID1.isEmpty() && !UserID2.isEmpty()){
-                chatroomkey = generateChatRoomKey(UserID1,UserID2);//call for generated chatroom id when two user start conversation for first time
-                createChatRoom(chatroomkey,"Doubt Solve Started", UserID1, UserID2, UserID1); //call when newly two user start conversation for first time
-
-                Log.d("User chatroomkey", chatroomkey);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-
-        Intent intent = getIntent();
-        if (intent.hasExtra("UserName")) {
-            String userName = intent.getStringExtra("UserName");
-            chatroomkey = intent.getStringExtra("ChatRoomId");
+        // Check if there are extras in the intent
+        if (i.hasExtra("UserName") && i.hasExtra("ChatRoomId")) {
+            String userName = i.getStringExtra("UserName");
+            chatroomkey = i.getStringExtra("ChatRoomId");
             dummy_user_name.setText(userName);
-
+            openExistingChatRoom(chatroomkey);
+        } else {
+            // Handle the case when it's a new chat
+            try {
+                if (!UserID1.isEmpty() && !UserID2.isEmpty()) {
+                    chatroomkey = generateChatRoomKey(UserID1, UserID2);
+                    createChatRoom(chatroomkey, "Doubt Solve Started", UserID1, UserID2, UserID1);
+                    Log.d("User chatroomkey", chatroomkey);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
+
 
     @Override
     protected void onStart() {
@@ -150,7 +145,7 @@ public class ChatMainActivity extends AppCompatActivity {
     newMessageRef.child("Sender").setValue(senderID);
     newMessageRef.child("timestamp").setValue(System.currentTimeMillis());
 }
-    public void createChatRoom(String chatroomkey, String initialMessage,String UserID1,String UserID2, String senderID) {
+    public void createChatRoom(String chatroomkey, String initialMessage, String UserID1,String UserID2, String senderID) {
         DatabaseReference chatRoomRef = rootNode.child("chatRooms").child(chatroomkey);
 
         // Create the message list child node
@@ -169,6 +164,42 @@ public class ChatMainActivity extends AppCompatActivity {
         messageInfoRef.child(UserID2).setValue(true);
 
     }
+
+    public void openExistingChatRoom(String chatroomkey) {
+        DatabaseReference chatRoomRef = rootNode.child("chatRooms").child(chatroomkey);
+
+        chatRoomRef.child("messageList").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // The chat messages exist, you can retrieve and display them
+                    massageList.clear();
+
+                    for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()) {
+                        String msg = msgSnapshot.child("Message").getValue(String.class);
+                        String senderId = msgSnapshot.child("Sender").getValue(String.class);
+                        Message message = new Message(msg, senderId);
+                        massageList.add(message);
+                    }
+
+                    // Update your ListView or RecyclerView with the loaded messages
+                    MassageAdapter adapter = new MassageAdapter(ChatMainActivity.this, massageList);
+                    Listview.setAdapter(adapter);
+                } else {
+                    // The chat messages do not exist
+                    // Handle this case accordingly, e.g., display a message indicating no messages
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Handle database errors if any
+            }
+        });
+    }
+
+
+
     public void createUser(String name,String email)
     {
         User newUser = new User(name,email);

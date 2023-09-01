@@ -196,7 +196,7 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        if(!pref.getBoolean("isMentor", false)){
+        if(pref.getBoolean("isMentor", false)){
             walletBtn.setVisibility(View.GONE);
         }
         walletBtn.setOnClickListener(new View.OnClickListener() {
