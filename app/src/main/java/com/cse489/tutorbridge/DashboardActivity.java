@@ -43,6 +43,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -63,6 +64,8 @@ public class DashboardActivity extends AppCompatActivity{
     SharedPreferences preferences;
     SharedPreferences.Editor edit;
     FirebaseAuth auth;
+    String json;
+    Gson gson;
 
 
     @Override
@@ -122,22 +125,15 @@ public class DashboardActivity extends AppCompatActivity{
             }
         });
 
-
-        DocumentReference ref = db.collection("mentor").document(Objects.requireNonNull(auth.getCurrentUser()).getUid());
-        ref.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                assert value != null;
-                System.out.println(value.getString("uuid"));
-            }
-        });
+        // Serialize the object to JSON
+        gson = new Gson();
 
         String docPath = preferences.getString("docPath", "");
         Log.d("DOCPAth", docPath);
 
         // Query "mentor_list" collection
         db.collection("mentor_list")
-                .whereEqualTo("uuid", docPath)
+                .whereEqualTo("uuid", auth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -148,6 +144,8 @@ public class DashboardActivity extends AppCompatActivity{
                                 MentorProfileClass mentor = document.toObject(MentorProfileClass.class); //todo got data
                                 System.out.println(mentor.getUuid());
                                 System.out.println(mentor.toString());
+                                json = gson.toJson(mentor);
+                                edit.putString("CurrentUser", json);
                                 edit.putBoolean("isMentor", true);
                                 edit.apply();
                             }
@@ -196,6 +194,9 @@ public class DashboardActivity extends AppCompatActivity{
                                 String name = (String) data.get("name");
                                 String uuid = (String) data.get("uuid");
                                 String date = (String) data.get("date");
+                                User u = new User(uuid, name, date);
+                                json = gson.toJson(u);
+                                edit.putString("CurrentUser", json);
                                 edit.putBoolean("isMentor", false);
                                 edit.apply();
                                 System.out.println("Found in user_info: " + name + uuid + date);

@@ -1,5 +1,7 @@
 package com.cse489.tutorbridge;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,6 +23,7 @@ import android.widget.TextView;
 
 import com.cse489.tutorbridge.adapters.MentorAdapter;
 import com.cse489.tutorbridge.modal.MentorProfileClass;
+import com.cse489.tutorbridge.modal.User;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +33,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -65,9 +69,26 @@ public class HomeFragment extends Fragment {
         offerImg = view.findViewById(R.id.offerImg);
 
         Context context = view.getContext();
-        SharedPreferences pref = context.getSharedPreferences("tutorBride", Context.MODE_PRIVATE);
-        String name = pref.getString("Name", "");
-        userName.setText(name);
+        SharedPreferences pref = context.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        String json = pref.getString("CurrentUser", "");
+        boolean isMentor = pref.getBoolean("isMentor", false);
+        System.out.println("isMentor" + isMentor);
+        Gson gson = new Gson();
+
+        try {
+            if(isMentor){
+                MentorProfileClass currentUser = gson.fromJson(json, MentorProfileClass.class);
+                System.out.println("HOME "+ currentUser.toString());
+                userName.setText(currentUser.getName());
+            }
+            else{
+                User currentUser = gson.fromJson(json, User.class);
+                userName.setText(currentUser.getName());
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         fetchMentorData(); // Fetch data from Firestore
 
