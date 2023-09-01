@@ -111,7 +111,9 @@ public class DashboardActivity extends AppCompatActivity{
                     selectedFragment = new HistoryFragment();
                 }
                 if(R.id.profile == item.getItemId()){
-                    selectedFragment = new ProfileFragment();
+                    //selectedFragment = new ProfileFragment();
+                    selectedFragment = new MyProfileFragment();
+
                 }
 
                 if (selectedFragment != null) {
