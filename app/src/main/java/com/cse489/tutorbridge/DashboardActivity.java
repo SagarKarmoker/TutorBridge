@@ -133,36 +133,40 @@ public class DashboardActivity extends AppCompatActivity{
         String docPath = preferences.getString("docPath", "");
         Log.d("DOCPAth", docPath);
 
-        // Query "mentor_list" collection
-        db.collection("mentor_list")
-                .whereEqualTo("uuid", auth.getCurrentUser().getUid())
-                .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        // If the document is found in "mentor_list" collection
-                        if (!queryDocumentSnapshots.isEmpty()) {
-                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                                MentorProfileClass mentor = document.toObject(MentorProfileClass.class); //todo got data
-                                System.out.println(mentor.getUuid());
-                                System.out.println(mentor.toString());
-                                json = gson.toJson(mentor);
-                                edit.putString("CurrentUser", json);
-                                edit.putBoolean("isMentor", true);
-                                edit.apply();
+        try {
+            // Query "mentor_list" collection
+            db.collection("mentor_list")
+                    .whereEqualTo("uuid", auth.getCurrentUser().getUid())
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            // If the document is found in "mentor_list" collection
+                            if (!queryDocumentSnapshots.isEmpty()) {
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                    MentorProfileClass mentor = document.toObject(MentorProfileClass.class); //todo got data
+                                    System.out.println(mentor.getUuid());
+                                    System.out.println(mentor.toString());
+                                    json = gson.toJson(mentor);
+                                    edit.putString("CurrentUser", json);
+                                    edit.putBoolean("isMentor", true);
+                                    edit.apply();
+                                }
+                            } else {
+                                // Document not found in "mentor_list" collection
+                                // Check the "user_info" collection
+                                checkUserInfoCollection(docPath);
                             }
-                        } else {
-                            // Document not found in "mentor_list" collection
-                            // Check the "user_info" collection
-                            checkUserInfoCollection(docPath);
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle failure
-                    }
-                });
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure
+                        }
+                    });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -182,7 +186,7 @@ public class DashboardActivity extends AppCompatActivity{
     // Function to check "user_info" collection if document is not found in "mentor_list"
     private void checkUserInfoCollection(String docPath) {
         db.collection("user_info")
-                .whereEqualTo("uuid", docPath)
+                .whereEqualTo("uuid", auth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override

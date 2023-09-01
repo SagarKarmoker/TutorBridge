@@ -1,8 +1,11 @@
 package com.cse489.tutorbridge.chat;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class Message {
+    FirebaseAuth auth = FirebaseAuth.getInstance();
     private String content;
-   private String currentUserId="5220603325601368084";//get from session
+   private String currentUserId=auth.getCurrentUser().getUid();//get from session
     private String senderId;
 
     public Message(String content,String senderId) {

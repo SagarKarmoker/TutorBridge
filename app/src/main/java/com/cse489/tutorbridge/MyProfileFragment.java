@@ -2,6 +2,7 @@ package com.cse489.tutorbridge;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,7 +33,7 @@ public class MyProfileFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        auth= FirebaseAuth.getInstance();
     }
 
     @Override
@@ -41,8 +42,6 @@ public class MyProfileFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_my_profile, container, false);
         Context context = view.getContext();
-
-        auth= FirebaseAuth.getInstance();
 
         proName= view.findViewById(R.id.proName);
         proEdu= view.findViewById(R.id.proEdu);
@@ -91,6 +90,12 @@ public class MyProfileFragment extends Fragment {
             public void onClick(View v) {
                 //logout
                 auth.signOut();
+                SharedPreferences preferences = context.getSharedPreferences("TutorBridge", Context.MODE_PRIVATE);
+                SharedPreferences.Editor edit = preferences.edit();
+                edit.putBoolean("TutorIsLoggedIn", false);
+                edit.apply();
+                Intent i = new Intent(getContext(), initialActivity.class);
+                startActivity(i);
             }
         });
 

@@ -84,13 +84,13 @@ public class ChatMainActivity extends AppCompatActivity {
         }
 
 
-//        Intent intent = getIntent();
-//        if (intent.hasExtra("UserName")) {
-//            String userName = intent.getStringExtra("UserName");
-//            chatroomkey = intent.getStringExtra("ChatRoomId");
-//            dummy_user_name.setText(userName);
-//
-//        }
+        Intent intent = getIntent();
+        if (intent.hasExtra("UserName")) {
+            String userName = intent.getStringExtra("UserName");
+            chatroomkey = intent.getStringExtra("ChatRoomId");
+            dummy_user_name.setText(userName);
+
+        }
 
     }
 
