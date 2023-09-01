@@ -153,16 +153,16 @@ public class SignupActivity extends AppCompatActivity {
                             Toast.makeText(SignupActivity.this, "User SignUp Complete", Toast.LENGTH_LONG).show();
                             FirebaseUser firebaseUser = auth.getCurrentUser();
 
-                            userRef = db.collection("user_info");
+                            /*userRef = db.collection("user_info");
                             long date = System.currentTimeMillis();
                             User userObj = new User(auth.getUid(), name, String.valueOf(date), email);
-                            addUserToDB(userObj);
+                            addUserToDB(userObj);*/
 
                             //send verification email
                             firebaseUser.sendEmailVerification();
 
                             //open user profile after successful signup registration
-                            Intent intent = new Intent(SignupActivity.this, LoginActivity.class);
+                            Intent intent = new Intent(SignupActivity.this, DashboardActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
@@ -189,7 +189,7 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-    private void addUserToDB(User userObj) {
+   /* private void addUserToDB(User userObj) {
         userRef.add(userObj).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
             @Override
             public void onSuccess(DocumentReference documentReference) {
@@ -197,5 +197,5 @@ public class SignupActivity extends AppCompatActivity {
 
             }
         });
-    };
+    };*/
 }
