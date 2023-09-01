@@ -145,6 +145,7 @@ public class SignupActivity extends AppCompatActivity {
     //register user using given credentials
     private void registerUser(String name, String email, String password) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
+
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(SignupActivity.this,
                 new OnCompleteListener<AuthResult>() {
                     @Override
@@ -162,9 +163,7 @@ public class SignupActivity extends AppCompatActivity {
                             firebaseUser.sendEmailVerification();
 
                             //open user profile after successful signup registration
-                            Intent intent = new Intent(SignupActivity.this, DashboardActivity.class);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    | Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Intent intent = new Intent(SignupActivity.this, EditPageActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
