@@ -2,7 +2,7 @@ package com.cse489.tutorbridge.modal;
 
 public class OrderModal {
     private String orderId, orderStatus, orderDate, paymentMethod, catagory;
-    private String metorId, userId;
+    private String mentorId, userId;
 
     public OrderModal(){
         //empty
@@ -19,12 +19,14 @@ public class OrderModal {
                 '}';
     }
 
-    public OrderModal(String orderId, String orderStatus, String orderDate, String paymentMethod, String catagory) {
+    public OrderModal( String mentorId, String userId,String orderId, String orderStatus, String orderDate, String paymentMethod, String catagory) {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.orderDate = orderDate;
         this.paymentMethod = paymentMethod;
         this.catagory = catagory;
+        this.mentorId=mentorId;
+        this.userId = userId;
     }
 
     public String getOrderId() {
@@ -68,11 +70,11 @@ public class OrderModal {
     }
 
     public String getMetorId() {
-        return metorId;
+        return mentorId;
     }
 
     public void setMetorId(String metorId) {
-        this.metorId = metorId;
+        this.mentorId = metorId;
     }
 
     public String getUserId() {

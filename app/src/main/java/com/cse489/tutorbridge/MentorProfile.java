@@ -16,8 +16,11 @@ import android.widget.TextView;
 import com.cse489.tutorbridge.modal.MentorProfileClass;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
@@ -34,12 +37,16 @@ public class MentorProfile extends AppCompatActivity {
 
     ImageView profilePic;
     Button hireBtn;
+    MentorProfileClass mentor;
+    FirebaseAuth auth;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tutor_details);
+
+        auth = FirebaseAuth.getInstance();
 
         MentorProfileClass mentor = (MentorProfileClass) getIntent().getSerializableExtra("mentorDetails");
         System.out.println(mentor.toString());
@@ -62,9 +69,6 @@ public class MentorProfile extends AppCompatActivity {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
-                //TODO fix user hardcoded
-                docRef = db.collection("mentor_list").document("XPyCnt3KehThLKSa87uG");
-
                 //image retrive
                 // Download the image
                 imageRef.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -97,7 +101,8 @@ public class MentorProfile extends AppCompatActivity {
                 try {
                     Intent i = new Intent(MentorProfile.this, PaymentActivity.class);
                     i.putExtra("mentorId", mentor.getUuid());
-                    i.putExtra("userId", mentor.getUuid()); //todo update userid
+                    i.putExtra("userId", auth.getCurrentUser().getUid()); //todo update userid
+                    System.out.println(mentor.getUuid() + "  " + auth.getCurrentUser().getUid());
                     i.putExtra("mentorSalary", mentor.getPrice());
                     i.putExtra("mentorCategory", mentor.getExpert());
                     System.out.println(orderIdGen());

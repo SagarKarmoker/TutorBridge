@@ -37,10 +37,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class PaymentActivity extends AppCompatActivity implements PaymentResultWithDataListener{
     private static final String TAG = PaymentActivity.class.getSimpleName();
     private AlertDialog.Builder alertDialogBuilder;
-    double salary=0;
+    double salary = 0;
     String mentorId="";
     String userId, orderId, category = "";
     TextView orderIdPayment, orderValue;
@@ -178,11 +182,15 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
             //alertDialogBuilder.setMessage("Payment Successful :\nPayment ID: "+s+"\nPayment Data: "+paymentData.getData());
             //alertDialogBuilder.show();
 
-//            String orderId, String orderStatus, String orderDate, String paymentMethod, String catagory
-            String date = "";
-            OrderModal order = new OrderModal(orderId, "Paid", date, "Visa/MasterCard", category);
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String date = sdf.format(calendar.getTime());
+
+            OrderModal order = new OrderModal(mentorId, userId, orderId, "Paid", date, "Visa/MasterCard", category);
 
 
+            order.toString();
             CollectionReference ordersCollection = db.collection("doubt_history"); // Replace "orders" with your collection name
             ordersCollection.add(order)
                     .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {

@@ -75,7 +75,7 @@ public class HistoryFragment extends Fragment {
 
     private void fetchMentorData() {
         db.collection("doubt_history")
-                .whereEqualTo("user", auth.getCurrentUser().getUid())
+                .whereEqualTo("userId", auth.getCurrentUser().getUid())
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     histories.clear(); // Clear existing data

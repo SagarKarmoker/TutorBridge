@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/orderDate"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="19-Aug-2023"
                 android:layout_marginLeft="18dp"
@@ -40,7 +40,7 @@
 
             <TextView
                 android:id="@+id/orderStatus"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Status: Done"
                 android:layout_marginLeft="18dp"
@@ -52,7 +52,7 @@
 
             <TextView
                 android:id="@+id/paymentMethod"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Payement method: Visa | Mastercard | bKash | Others"
                 android:layout_marginLeft="18dp"
@@ -64,7 +64,7 @@
 
             <TextView
                 android:id="@+id/orderCategory"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Category: Android"
                 android:padding="8dp"

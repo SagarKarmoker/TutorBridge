@@ -49,7 +49,7 @@ public class HistoryAdapter extends ArrayAdapter<HistoryClass> {
         orderDate.setText("On: "+history.getOrderDate());
         orderStatus.setText("Status: "+history.getOrderStatus());
         paymentMethod.setText("Payment Method: "+history.getPaymentMethod());
-        orderCategory.setText("(Category: "+history.getOrderCategory() + ")");
+        orderCategory.setText("(Category: "+ history.getOrderCategory() + ")");
 
         //TODO send user and mentor data also
 
