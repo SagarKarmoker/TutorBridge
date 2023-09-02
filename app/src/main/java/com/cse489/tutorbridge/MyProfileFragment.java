@@ -93,6 +93,7 @@ public class MyProfileFragment extends Fragment {
                 SharedPreferences preferences = context.getSharedPreferences("TutorBridge", Context.MODE_PRIVATE);
                 SharedPreferences.Editor edit = preferences.edit();
                 edit.putBoolean("TutorIsLoggedIn", false);
+                edit.putString("CurrentUser", "");
                 edit.apply();
                 Intent i = new Intent(getContext(), initialActivity.class);
                 startActivity(i);

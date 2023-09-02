@@ -26,6 +26,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -101,7 +102,13 @@ public class char_history_activity extends AppCompatActivity {
                     }
                 }
                 System.out.println(participantUserIds.size());
-                fetchAndAdaptOrder(participantUserIds);
+                boolean isMentor = pref.getBoolean("isMentor", false);
+                if(isMentor){
+                    fetchAndAdaptOrderMentor(participantUserIds);
+                }
+                else{
+                    fetchAndAdaptOrderUser(participantUserIds);
+                }
             }
 
             @Override
@@ -111,14 +118,12 @@ public class char_history_activity extends AppCompatActivity {
         });
     }
 
-    private void fetchAndAdaptOrder(ArrayList<String> participantUserIds) {
+    private void fetchAndAdaptOrderMentor(ArrayList<String> participantUserIds) {
         // Define your Firestore collection reference
         CollectionReference userRef = db.collection("doubt_history"); // Change to "user_info"
 
         // Clear the userList if needed
         orderList.clear();
-
-        boolean isMentor = pref.getBoolean("isMentor", false);
 
         // Create a Set to keep track of added orderIds
         Set<String> addedOrderIds = new HashSet<>();
@@ -126,7 +131,52 @@ public class char_history_activity extends AppCompatActivity {
         // Iterate over the userIds and query Firestore
         for (String userId : participantUserIds) {
             userRef
-                    .whereEqualTo(isMentor ? "mentorId" : "userId", userId)
+                    .whereEqualTo("metorId", userId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                // Access document data using document.getData()
+                                OrderModal order = document.toObject(OrderModal.class);
+                                String orderId = order.getOrderId();
+
+                                // Check if the orderId has already been added
+                                if (!addedOrderIds.contains(orderId)) {
+                                    orderList.add(order);
+                                    addedOrderIds.add(orderId);
+                                }
+                            }
+
+                            Collections.reverse(orderList);
+                            // Update the UI after fetching data
+                            ListAdapter adapter = new ListAdapter(char_history_activity.this, orderList);
+                            Listview.setAdapter(adapter);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure
+                        }
+                    });
+        }
+    }
+
+    private void fetchAndAdaptOrderUser(ArrayList<String> participantUserIds) {
+        // Define your Firestore collection reference
+        CollectionReference userRef = db.collection("doubt_history"); // Change to "user_info"
+
+        // Clear the userList if needed
+        orderList.clear();
+
+        // Create a Set to keep track of added orderIds
+        Set<String> addedOrderIds = new HashSet<>();
+
+        // Iterate over the userIds and query Firestore
+        for (String userId : participantUserIds) {
+            userRef
+                    .whereEqualTo("userId", userId)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
