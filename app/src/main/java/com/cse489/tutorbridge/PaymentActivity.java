@@ -209,6 +209,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
             Intent i = new Intent(PaymentActivity.this, ChatMainActivity.class);
             i.putExtra("mentorid", mentorId);
             i.putExtra("userid", userId);
+            i.putExtra("orderId", orderId);
             startActivity(i);
         }catch (Exception e){
             e.printStackTrace();

@@ -32,6 +32,7 @@ public class ChatMainActivity extends AppCompatActivity {
     DatabaseReference rootNode;
     String UserID1="", chatroomkey; //suppose admin sent message retrive id from session id
     String UserID2=""; // retrive id from getTag() when user intaract with UI
+    String orderID;
     TextView dummy_user_name;
     EditText massageEd;
     List<Message> massageList;
@@ -46,6 +47,8 @@ public class ChatMainActivity extends AppCompatActivity {
         Intent i = getIntent();
         UserID1 = i.getStringExtra("mentorid");
         UserID2 = i.getStringExtra("userid");
+        orderID = i.getStringExtra("orderId");
+
         Log.d("User INFO", UserID1 + " " + UserID2);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -76,14 +79,11 @@ public class ChatMainActivity extends AppCompatActivity {
             openExistingChatRoom(chatroomkey);
         } else {
             // Handle the case when it's a new chat
-            try {
-                if (!UserID1.isEmpty() && !UserID2.isEmpty()) {
-                    chatroomkey = generateChatRoomKey(UserID1, UserID2);
-                    createChatRoom(chatroomkey, "Doubt Solve Started", UserID1, UserID2, UserID1);
-                    Log.d("User chatroomkey", chatroomkey);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (!UserID1.isEmpty() && !UserID2.isEmpty()) {
+                //chatroomkey = generateChatRoomKey(UserID1, UserID2);
+                chatroomkey = orderID;
+                createChatRoom(chatroomkey, "Doubt Solve Started", UserID1, UserID2, UserID1);
+                Log.d("User chatroomkey", chatroomkey);
             }
         }
     }
@@ -124,17 +124,20 @@ public class ChatMainActivity extends AppCompatActivity {
 //        Message newMessage = new Message(massage); // Assuming you have a Message class
 //        MessageAdapter adapter =new MessageAdapter()
     }
-
-    private String generateChatRoomKey(String sender_id, String recever_id) {
-        // Sort the user IDs alphabetically to ensure consistent keys regardless of order
-        String sortedUserIds = sender_id+"_"+recever_id;
-
-        // You can further hash or manipulate the concatenated string to create a unique key
-        // For simplicity, let's assume the sorted string is the key
-        return sortedUserIds;
+    private String generateChatRoomKey(String orderId){
+        return orderId;
     }
-    public void sentMassage(String massage,String senderID)
-{
+
+//    private String generateChatRoomKey(String sender_id, String recever_id) {
+//        // Sort the user IDs alphabetically to ensure consistent keys regardless of order
+//        String sortedUserIds = sender_id+"_"+recever_id;
+//
+//        // You can further hash or manipulate the concatenated string to create a unique key
+//        // For simplicity, let's assume the sorted string is the key
+//        return sortedUserIds;
+//    }
+
+    public void sentMassage(String massage,String senderID) {
     DatabaseReference messageListRef = rootNode.child("chatRooms").child(chatroomkey).child("messageList");
 
     // Create the message list child node
@@ -196,18 +199,5 @@ public class ChatMainActivity extends AppCompatActivity {
                 // Handle database errors if any
             }
         });
-    }
-
-
-
-    public void createUser(String name,String email)
-    {
-        User newUser = new User(name,email);
-       UUID userId= UUID.randomUUID();
-// Generate a new UUID for the user
-       String combinedId = userId.getMostSignificantBits() + "";
-// Store the user data under the generated UUID
-        DatabaseReference userRef = rootNode.child("user").child(combinedId);
-        userRef.setValue(newUser);
     }
 }

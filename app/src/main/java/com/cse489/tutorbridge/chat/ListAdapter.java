@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
+import com.cse489.tutorbridge.modal.OrderModal;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.List;
@@ -17,10 +18,10 @@ import java.util.List;
 public class ListAdapter extends ArrayAdapter {
 
     private Activity mContext;
-    List<User> userList;
+    List<OrderModal> userList;
     TextView tvName;
 
-    public ListAdapter(Activity mContext, List<User> userList){
+    public ListAdapter(Activity mContext, List<OrderModal> userList){
         super(mContext,R.layout.user_item,userList);
         this.mContext = mContext;
         this.userList = userList;
@@ -41,10 +42,9 @@ public class ListAdapter extends ArrayAdapter {
         tvName = convertView.findViewById(R.id.username);
 
 
-        User user = userList.get(position);
+        OrderModal orderModal = userList.get(position);
 
-
-        tvName.setText(user.getName());
+        tvName.setText(orderModal.getOrderId());
 
         return convertView;
     }
