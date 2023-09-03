@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +35,8 @@ public class LoginActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
     SharedPreferences.Editor edit;
+    private static final String TAG = "LoginActivity";
+    private  ImageView viewPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,24 @@ public class LoginActivity extends AppCompatActivity {
 
         preferences = this.getSharedPreferences("TutorBridge", MODE_PRIVATE);
         edit = preferences.edit();
+
+        //password hide or show
+        viewPass = findViewById(R.id.viewPass);
+        viewPass.setImageResource(R.drawable.icon_hide);
+        viewPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (etPassword.getTransformationMethod().equals(HideReturnsTransformationMethod.getInstance())) {
+                    // If password is visible then Hide it
+                    etPassword.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                    // Change Icon
+                    viewPass.setImageResource(R.drawable.icon_hide);
+                } else {
+                    etPassword.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                    viewPass.setImageResource(R.drawable.icon_visible);
+                }
+            }
+        });
 
 
         //Go to signup page
@@ -116,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
                     edit.apply();
                     Intent i4 = new Intent(LoginActivity.this, DashboardActivity.class);
                     startActivity(i4);
+
                 }
                 else {
                     Toast.makeText(LoginActivity.this,"Enter a valid Email!",Toast.LENGTH_SHORT).show();
@@ -124,5 +147,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     
 }
