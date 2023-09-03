@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".EditPageActivity"
+    android:background="@color/body_bg"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp">
+
+    <ImageView
+        android:id="@+id/profilePic"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/lost_circle"
+        android:src="@drawable/profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/pictureUploadIcon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toBottomOf="@+id/profilePic"
+        app:layout_constraintEnd_toEndOf="@+id/profilePic"
+        app:srcCompat="@drawable/gallery" />
+    <!--    user name section-->
+    <TextView
+        android:id="@+id/tvUserName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Name :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profilePic" />
+
+    <EditText
+        android:id="@+id/etUserName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Name"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvUserName"
+        app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Phone Number :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etUserName" />
+
+    <EditText
+        android:id="@+id/etPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Number"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvPhone"
+        app:layout_constraintTop_toBottomOf="@+id/tvPhone" />
+    <TextView
+        android:id="@+id/tvAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Address :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPhone" />
+
+    <EditText
+        android:id="@+id/etAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="location"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvAddress"
+        app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
+    <TextView
+        android:id="@+id/tvEducation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Last Educational Qualification :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etAddress" />
+
+    <EditText
+        android:id="@+id/etEducation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Name of Degree"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvEducation"
+        app:layout_constraintTop_toBottomOf="@+id/tvEducation" />
+    <TextView
+        android:id="@+id/tvExpert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Want to teach :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etEducation" />
+
+    <EditText
+        android:id="@+id/etExpert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Expert In"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvExpert"
+        app:layout_constraintTop_toBottomOf="@+id/tvExpert" />
+    <TextView
+        android:id="@+id/tvYears"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Years of Experience"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etExpert" />
+
+    <EditText
+        android:id="@+id/etYears"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Year"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvYears"
+        app:layout_constraintTop_toBottomOf="@+id/tvYears" />
+
+    <TextView
+        android:id="@+id/tvPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="Expected price"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@+id/etYears"
+        app:layout_constraintTop_toTopOf="@+id/tvYears" />
+
+    <EditText
+        android:id="@+id/etPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Amount"
+        android:inputType="number"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toEndOf="@+id/etYears"
+        app:layout_constraintTop_toBottomOf="@+id/tvPrice" />
+    <TextView
+        android:id="@+id/tvDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Short Description :"
+        android:textColor="@color/button_bg"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etYears" />
+
+    <EditText
+        android:id="@+id/etDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edit_text"
+        android:ems="10"
+        android:hint="Description"
+        android:inputType="text"
+        android:padding="10dp"
+        android:textSize="16dp"
+        app:layout_constraintStart_toStartOf="@+id/tvDescription"
+        app:layout_constraintTop_toBottomOf="@+id/tvDescription" />
+
+    <Button
+        android:id="@+id/btnSaveInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/button_border"
+        android:text="Save Information"
+        android:textColor="@color/button_bg"
+
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:elevation="10dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ProgressBar>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

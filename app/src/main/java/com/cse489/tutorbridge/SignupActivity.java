@@ -178,18 +178,22 @@ public class SignupActivity extends AppCompatActivity {
                                                 auth.getUid(), name, "", email, "", "", "", "", "Unverified", "Dhaka", "", date, 0, 0
                                         );
                                         addUserToMentorDB(mentorObj, userRef);
+                                        Intent intent = new Intent(SignupActivity.this, EditPageActivity.class);
+                                        startActivity(intent);
                                     } else {
                                         // Create a User object
                                         User userObj = new User(auth.getUid(), name, date, email);
                                         addUserToDB(userObj, userRef);
+                                        Intent intent = new Intent(SignupActivity.this, DashboardActivity.class);
+                                        startActivity(intent);
                                     }
 
-                                    // Open user profile after successful signup registration
+                                    // Open user profile after successful signup registration (new)
                                     progressBar.setVisibility(View.GONE);
-                                    Intent intent = new Intent(SignupActivity.this, DashboardActivity.class);
+                                    Intent intent = new Intent(SignupActivity.this, EditPageActivity.class);
                                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                                     intent.putExtra("docPath", auth.getUid());
-                                    startActivity(intent);
+
                                     finish();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
