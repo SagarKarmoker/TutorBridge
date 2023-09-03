@@ -15,6 +15,8 @@ import java.util.List;
 public class MassageAdapter extends BaseAdapter {
     private Context context;
     private List<Message> messagesList;
+    TextView item_message_sent_view_id;
+    TextView item_message_received_id;
 
     public MassageAdapter(Context context, List<Message> messages) {
         this.context = context;
@@ -39,33 +41,33 @@ public class MassageAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Message message = messagesList.get(position);
-        ViewHolder viewHolder;
+        LayoutInflater inflater = LayoutInflater.from(context);
 
-        if (convertView == null) {
-            LayoutInflater inflater = LayoutInflater.from(context);
-            viewHolder = new ViewHolder();
+        if (message.isSentByCurrentUser()) {
+            convertView = inflater.inflate(R.layout.item_message_sent, parent, false);
+            // Bind and display sent message
+            item_message_sent_view_id = convertView.findViewById(R.id.item_message_sent_view);
 
-            if (message.isSentByCurrentUser()) {
-                convertView = inflater.inflate(R.layout.item_message_sent, parent, false);
-                viewHolder.messageView = convertView.findViewById(R.id.item_message_sent_view);
-            } else {
-                convertView = inflater.inflate(R.layout.item_message_received, parent, false);
-                viewHolder.messageView = convertView.findViewById(R.id.item_message_rcv_view);
-            }
 
-            convertView.setTag(viewHolder);
-        } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            Message msg = messagesList.get(position);
+
+
+            item_message_sent_view_id.setText(msg.getContent());
+
+        }
+        else {
+            convertView = inflater.inflate(R.layout.item_message_received, parent, false);
+            // Bind and display received message
+            item_message_received_id = convertView.findViewById(R.id.item_message_rcv_view);
+
+
+            Message msg = messagesList.get(position);
+
+
+            item_message_received_id.setText(msg.getContent());
+
         }
 
-        // Bind and display the message content
-        viewHolder.messageView.setText(message.getContent());
-
         return convertView;
-    }
-
-    // ViewHolder pattern for better performance
-    private static class ViewHolder {
-        TextView messageView;
     }
 }

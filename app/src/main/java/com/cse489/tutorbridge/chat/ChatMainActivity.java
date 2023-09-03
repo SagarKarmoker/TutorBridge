@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 
 import com.cse489.tutorbridge.R;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,6 +40,10 @@ public class ChatMainActivity extends AppCompatActivity {
     ListView Listview;
     Button send;
 
+    String senderID = "";
+
+    FirebaseAuth auth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,9 @@ public class ChatMainActivity extends AppCompatActivity {
         UserID2 = i.getStringExtra("userid");
         orderID = i.getStringExtra("orderId");
 
+        auth = FirebaseAuth.getInstance();
+
+        senderID = auth.getCurrentUser().getUid();
         Log.d("User INFO", UserID1 + " " + UserID2);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -65,7 +73,7 @@ public class ChatMainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String massage = massageEd.getText().toString();
                 if (!massage.isEmpty()) {
-                    sentMassage(massage, UserID2);
+                    sentMassage(massage, senderID);
                 }
                 massageEd.setText("");
             }

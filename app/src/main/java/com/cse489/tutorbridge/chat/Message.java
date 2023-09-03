@@ -18,9 +18,9 @@ public class Message {
     public boolean isSentByCurrentUser() {
         // Get the current user ID when needed
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        String currentUserId = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+        String currentUserId = auth.getCurrentUser().getUid();
 
         // Check if the sender ID matches the current user's ID
-        return currentUserId != null && currentUserId.equals(senderId);
+        return currentUserId.equals(senderId);
     }
 }
