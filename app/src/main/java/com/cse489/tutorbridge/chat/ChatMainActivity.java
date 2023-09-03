@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 
 import com.cse489.tutorbridge.R;
+import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,7 +39,7 @@ public class ChatMainActivity extends AppCompatActivity {
     EditText massageEd;
     List<Message> massageList;
     ListView Listview;
-    Button send;
+    MaterialButton send;
 
     String senderID = "";
 
