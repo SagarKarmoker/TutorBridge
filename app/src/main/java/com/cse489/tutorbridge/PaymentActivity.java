@@ -211,6 +211,8 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
             i.putExtra("userid", userId);
             i.putExtra("orderId", orderId);
             startActivity(i);
+
+            finish();
         }catch (Exception e){
             e.printStackTrace();
         }

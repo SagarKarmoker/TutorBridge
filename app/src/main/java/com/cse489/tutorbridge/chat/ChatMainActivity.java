@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.cse489.tutorbridge.DashboardActivity;
 import com.cse489.tutorbridge.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +47,8 @@ public class ChatMainActivity extends AppCompatActivity {
 
     FirebaseAuth auth;
 
+    ImageView backChat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +73,16 @@ public class ChatMainActivity extends AppCompatActivity {
         Listview.setDivider(null); // Remove the divider
         Listview.setDividerHeight(0);
         send = findViewById(R.id.send_button);
+        backChat = findViewById(R.id.backChat);
+
+        backChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChatMainActivity.this, DashboardActivity.class);
+                startActivity(i);
+            }
+        });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
