@@ -10,11 +10,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 
+import com.cse489.tutorbridge.DashboardActivity;
 import com.cse489.tutorbridge.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,11 +36,18 @@ public class ChatMainActivity extends AppCompatActivity {
     DatabaseReference rootNode;
     String UserID1="", chatroomkey; //suppose admin sent message retrive id from session id
     String UserID2=""; // retrive id from getTag() when user intaract with UI
+    String orderID;
     TextView dummy_user_name;
     EditText massageEd;
     List<Message> massageList;
     ListView Listview;
-    Button send;
+    MaterialButton send;
+
+    String senderID = "";
+
+    FirebaseAuth auth;
+
+    ImageView backChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +57,11 @@ public class ChatMainActivity extends AppCompatActivity {
         Intent i = getIntent();
         UserID1 = i.getStringExtra("mentorid");
         UserID2 = i.getStringExtra("userid");
+        orderID = i.getStringExtra("orderId");
+
+        auth = FirebaseAuth.getInstance();
+
+        senderID = auth.getCurrentUser().getUid();
         Log.d("User INFO", UserID1 + " " + UserID2);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -57,12 +73,22 @@ public class ChatMainActivity extends AppCompatActivity {
         Listview.setDivider(null); // Remove the divider
         Listview.setDividerHeight(0);
         send = findViewById(R.id.send_button);
+        backChat = findViewById(R.id.backChat);
+
+        backChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ChatMainActivity.this, DashboardActivity.class);
+                startActivity(i);
+            }
+        });
+
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String massage = massageEd.getText().toString();
                 if (!massage.isEmpty()) {
-                    sentMassage(massage, UserID2);
+                    sentMassage(massage, senderID);
                 }
                 massageEd.setText("");
             }
@@ -76,14 +102,11 @@ public class ChatMainActivity extends AppCompatActivity {
             openExistingChatRoom(chatroomkey);
         } else {
             // Handle the case when it's a new chat
-            try {
-                if (!UserID1.isEmpty() && !UserID2.isEmpty()) {
-                    chatroomkey = generateChatRoomKey(UserID1, UserID2);
-                    createChatRoom(chatroomkey, "Doubt Solve Started", UserID1, UserID2, UserID1);
-                    Log.d("User chatroomkey", chatroomkey);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (!UserID1.isEmpty() && !UserID2.isEmpty()) {
+                //chatroomkey = generateChatRoomKey(UserID1, UserID2);
+                chatroomkey = orderID;
+                createChatRoom(chatroomkey, "Doubt Solve Started", UserID1, UserID2, UserID1);
+                Log.d("User chatroomkey", chatroomkey);
             }
         }
     }
@@ -124,17 +147,20 @@ public class ChatMainActivity extends AppCompatActivity {
 //        Message newMessage = new Message(massage); // Assuming you have a Message class
 //        MessageAdapter adapter =new MessageAdapter()
     }
-
-    private String generateChatRoomKey(String sender_id, String recever_id) {
-        // Sort the user IDs alphabetically to ensure consistent keys regardless of order
-        String sortedUserIds = sender_id+"_"+recever_id;
-
-        // You can further hash or manipulate the concatenated string to create a unique key
-        // For simplicity, let's assume the sorted string is the key
-        return sortedUserIds;
+    private String generateChatRoomKey(String orderId){
+        return orderId;
     }
-    public void sentMassage(String massage,String senderID)
-{
+
+//    private String generateChatRoomKey(String sender_id, String recever_id) {
+//        // Sort the user IDs alphabetically to ensure consistent keys regardless of order
+//        String sortedUserIds = sender_id+"_"+recever_id;
+//
+//        // You can further hash or manipulate the concatenated string to create a unique key
+//        // For simplicity, let's assume the sorted string is the key
+//        return sortedUserIds;
+//    }
+
+    public void sentMassage(String massage,String senderID) {
     DatabaseReference messageListRef = rootNode.child("chatRooms").child(chatroomkey).child("messageList");
 
     // Create the message list child node
@@ -196,18 +222,5 @@ public class ChatMainActivity extends AppCompatActivity {
                 // Handle database errors if any
             }
         });
-    }
-
-
-
-    public void createUser(String name,String email)
-    {
-        User newUser = new User(name,email);
-       UUID userId= UUID.randomUUID();
-// Generate a new UUID for the user
-       String combinedId = userId.getMostSignificantBits() + "";
-// Store the user data under the generated UUID
-        DatabaseReference userRef = rootNode.child("user").child(combinedId);
-        userRef.setValue(newUser);
     }
 }

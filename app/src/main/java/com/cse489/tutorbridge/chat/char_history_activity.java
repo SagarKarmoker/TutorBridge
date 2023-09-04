@@ -11,6 +11,7 @@ import com.cse489.tutorbridge.R;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.cse489.tutorbridge.modal.OrderModal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,12 +26,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class char_history_activity extends AppCompatActivity {
 
     ListView Listview;
-    List<User> userList;
+    List<OrderModal> orderList;
     List<String> chatroomId;
 
     DatabaseReference chatRoomsRef;
@@ -52,18 +56,18 @@ public class char_history_activity extends AppCompatActivity {
 
         Listview = findViewById(R.id.listview);
         chatroomId = new ArrayList<>();
-        userList = new ArrayList<>();
+        orderList = new ArrayList<>();
 
         Listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, final View view, int
                     position, long id) {
 
-                User clickedEvent = userList.get(position); // retrieve clickable object that type is EventObject
+                OrderModal clickedEvent = orderList.get(position); // retrieve clickable object that type is EventObject
                 String key = chatroomId.get(position);
 
                 Intent i = new Intent(char_history_activity.this, ChatMainActivity.class);
-                i.putExtra("UserName", clickedEvent.getName());
+                i.putExtra("UserName", clickedEvent.getOrderId());
                 i.putExtra("ChatRoomId", key);
                 startActivity(i);
             }
@@ -100,12 +104,11 @@ public class char_history_activity extends AppCompatActivity {
                 System.out.println(participantUserIds.size());
                 boolean isMentor = pref.getBoolean("isMentor", false);
                 if(isMentor){
-                    fetchAndAdaptMentor(participantUserIds);
+                    fetchAndAdaptOrderMentor(participantUserIds);
                 }
-                else {
-                    fetchAndAdaptUser(participantUserIds);
+                else{
+                    fetchAndAdaptOrderUser(participantUserIds);
                 }
-
             }
 
             @Override
@@ -115,32 +118,83 @@ public class char_history_activity extends AppCompatActivity {
         });
     }
 
-    private void fetchAndAdaptMentor(ArrayList<String> participantUserIds) {
+    private void fetchAndAdaptOrderMentor(ArrayList<String> participantUserIds) {
         // Define your Firestore collection reference
-        CollectionReference userRef = db.collection("mentor_list"); // Change to "user_info"
+        CollectionReference userRef = db.collection("doubt_history"); // Change to "user_info"
 
         // Clear the userList if needed
-        userList.clear();
+        orderList.clear();
+
+        // Create a Set to keep track of added orderIds
+        Set<String> addedOrderIds = new HashSet<>();
 
         // Iterate over the userIds and query Firestore
         for (String userId : participantUserIds) {
             userRef
-                    .whereEqualTo("uuid", userId)
+                    .whereEqualTo("metorId", userId)
                     .get()
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 // Access document data using document.getData()
-                                String username = document.getString("name");
-                                String email = document.getString("email");
-                                User user = new User(username, email);
-                                System.out.println(username + email);
-                                userList.add(user);
+                                OrderModal order = document.toObject(OrderModal.class);
+                                String orderId = order.getOrderId();
+
+                                // Check if the orderId has already been added
+                                if (!addedOrderIds.contains(orderId)) {
+                                    orderList.add(order);
+                                    addedOrderIds.add(orderId);
+                                }
+                            }
+
+                            Collections.reverse(orderList);
+                            // Update the UI after fetching data
+                            ListAdapter adapter = new ListAdapter(char_history_activity.this, orderList);
+                            Listview.setAdapter(adapter);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure
+                        }
+                    });
+        }
+    }
+
+    private void fetchAndAdaptOrderUser(ArrayList<String> participantUserIds) {
+        // Define your Firestore collection reference
+        CollectionReference userRef = db.collection("doubt_history"); // Change to "user_info"
+
+        // Clear the userList if needed
+        orderList.clear();
+
+        // Create a Set to keep track of added orderIds
+        Set<String> addedOrderIds = new HashSet<>();
+
+        // Iterate over the userIds and query Firestore
+        for (String userId : participantUserIds) {
+            userRef
+                    .whereEqualTo("userId", userId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                // Access document data using document.getData()
+                                OrderModal order = document.toObject(OrderModal.class);
+                                String orderId = order.getOrderId();
+
+                                // Check if the orderId has already been added
+                                if (!addedOrderIds.contains(orderId)) {
+                                    orderList.add(order);
+                                    addedOrderIds.add(orderId);
+                                }
                             }
 
                             // Update the UI after fetching data
-                            ListAdapter adapter = new ListAdapter(char_history_activity.this, userList);
+                            ListAdapter adapter = new ListAdapter(char_history_activity.this, orderList);
                             Listview.setAdapter(adapter);
                         }
                     })
@@ -154,12 +208,12 @@ public class char_history_activity extends AppCompatActivity {
     }
 
 
-    private void fetchAndAdaptUser(ArrayList<String> participantUserIds) {
+    private void fetchAndAdaptMentor(ArrayList<String> participantUserIds) {
         // Define your Firestore collection reference
-        CollectionReference userRef = db.collection("user_info"); // Change to "user_info"
+        CollectionReference userRef = db.collection("mentor_list"); // Change to "user_info"
 
         // Clear the userList if needed
-        userList.clear();
+        orderList.clear();
 
         // Iterate over the userIds and query Firestore
         for (String userId : participantUserIds) {
@@ -171,15 +225,52 @@ public class char_history_activity extends AppCompatActivity {
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                                 // Access document data using document.getData()
-                                String username = document.getString("name");
-                                String email = document.getString("email");
-                                User user = new User(username, email);
-                                System.out.println(username + email);
-                                userList.add(user);
+//                                String username = document.getString("name");
+//                                String email = document.getString("email");
+//                                OrderModal order = new OrderModal(username, email);
+//                                System.out.println(username + email);
+//                                userList.add(user);
                             }
 
                             // Update the UI after fetching data
-                            ListAdapter adapter = new ListAdapter(char_history_activity.this, userList);
+                            ListAdapter adapter = new ListAdapter(char_history_activity.this, orderList);
+                            Listview.setAdapter(adapter);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle failure
+                        }
+                    });
+        }
+    }
+    private void fetchAndAdaptUser(ArrayList<String> participantUserIds) {
+        // Define your Firestore collection reference
+        CollectionReference userRef = db.collection("user_info"); // Change to "user_info"
+
+        // Clear the userList if needed
+        orderList.clear();
+
+        // Iterate over the userIds and query Firestore
+        for (String userId : participantUserIds) {
+            userRef
+                    .whereEqualTo("uuid", userId)
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                // Access document data using document.getData()
+//                                String username = document.getString("name");
+//                                String email = document.getString("email");
+//                                User user = new User(username, email);
+//                                System.out.println(username + email);
+//                                userList.add(user);
+                            }
+
+                            // Update the UI after fetching data
+                            ListAdapter adapter = new ListAdapter(char_history_activity.this, orderList);
                             Listview.setAdapter(adapter);
                         }
                     })

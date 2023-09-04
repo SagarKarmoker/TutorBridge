@@ -153,7 +153,7 @@ public class HomeFragment extends Fragment {
 
     private void fetchMentorData() {
         db.collection("mentor_list")
-                .whereEqualTo("status", "Unverified")
+                .whereEqualTo("status", "Verified")
                 .get()
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     mentors.clear(); // Clear existing data

@@ -27,6 +27,20 @@ public class MentorProfileClass implements Serializable {
         this.date = date;
     }
 
+    public MentorProfileClass(String name, String phone, String education, String expert, String desc, String status, String location, String year, String date, double price, double wallet) {
+        this.name = name;
+        this.phone = phone;
+        this.education = education;
+        this.expert = expert;
+        this.desc = desc;
+        this.status = status;
+        this.location = location;
+        this.year = year;
+        this.price = price;
+        this.wallet = wallet;
+        this.date = date;
+    }
+
     public String getUuid() {
         return uuid;
     }

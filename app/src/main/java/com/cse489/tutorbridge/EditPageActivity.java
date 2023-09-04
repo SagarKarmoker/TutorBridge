@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -14,13 +15,25 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.cse489.tutorbridge.modal.MentorProfileClass;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -29,6 +42,9 @@ public class EditPageActivity extends AppCompatActivity {
     private Button btnSaveInfo;
     private ProgressBar progressBar;
     private FirebaseAuth authProfile;
+
+    SharedPreferences preferences;
+    SharedPreferences.Editor edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,30 +177,88 @@ public class EditPageActivity extends AppCompatActivity {
     //all methode
     private void registerUserInfo(String textName, String textPhone, String textAddress, String textEducation, String textExpert, String textYears, String textPrice, String textDescription) {
         FirebaseAuth auth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = auth.getCurrentUser();
         //enter data into firebase realtime database
         ReadWriteUserDetails writeUserDetails = new ReadWriteUserDetails(textName,textPhone,textAddress,textEducation,
                 textExpert,textYears,textPrice,textDescription);
 
-        // Extracting user reference from Database for "Registered users"
-        DatabaseReference referenceProfile = FirebaseDatabase.getInstance().getReference("Registered Users");
+//        (String name, String phone, String education, String expert, String desc, String status, String location, String year, String date, double price, double wallet)
+        MentorProfileClass mentor = new MentorProfileClass(textName,textPhone,textEducation, textExpert, textDescription, "Verified", textAddress, textYears,String.valueOf(System.currentTimeMillis()) , Double.parseDouble(textPrice), 0);
 
-        referenceProfile.child(firebaseUser.getUid()).setValue(writeUserDetails).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if(task.isSuccessful()){
-                    Toast.makeText(EditPageActivity.this, "User Details Saved", Toast.LENGTH_LONG).show();
 
-                    Intent intent = new Intent(EditPageActivity.this, DashboardActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
-                } else{
-                    Toast.makeText(EditPageActivity.this, "Something Went Wrong! Check Again. ", Toast.LENGTH_LONG).show();
-                }
-                progressBar.setVisibility(View.GONE);
-            }
-        });
+
+        // Get a reference to your Firestore database
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        preferences = this.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        boolean isMentor = preferences.getBoolean("isMentor", false);
+
+//        if(isMentor){
+//
+//        }else{
+//
+//        }
+
+        // Get a reference to your Firestore database
+        // Define a collection reference (you can change "mentor_list" to your desired collection name)
+        CollectionReference userDetailRef = db.collection("mentor_list");
+
+        // Use a query to find the document with the specified UID
+        Query query = userDetailRef.whereEqualTo("uuid", auth.getCurrentUser().getUid());
+
+        // Execute the query
+        query.get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        // Check if the query returned any documents
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            // Assuming there's only one document with the same UID, you can update it
+                            QueryDocumentSnapshot documentSnapshot = (QueryDocumentSnapshot) queryDocumentSnapshots.getDocuments().get(0);
+
+                            // Create a map with the fields you want to update
+                            Map<String, Object> updates = new HashMap<>();
+//                            String name, String phone, String education, String expert, String desc, String status, String location, String year, String date, double price, double wallet
+//                            textName,textPhone,textEducation, textExpert, textDescription, "Verified", textAddress, textYears,String.valueOf(System.currentTimeMillis()) , Double.parseDouble(textPrice), 0
+                            updates.put("name", textName);
+                            updates.put("phone", textPhone);
+                            updates.put("education", textEducation);
+                            updates.put("expert", textExpert);
+                            updates.put("desc", textDescription);
+                            updates.put("status", "Verified");
+                            updates.put("location", textAddress);
+                            updates.put("year", textYears);
+                            updates.put("date", String.valueOf(System.currentTimeMillis()));
+                            updates.put("price", Double.parseDouble(textPrice));
+
+                            // Update the document with the new user details
+                            userDetailRef.document(documentSnapshot.getId())
+                                    .update(updates)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(EditPageActivity.this, "User Details Updated", Toast.LENGTH_LONG).show();
+                                            // Optionally, you can finish the activity or perform other actions
+                                            Intent i = new Intent(EditPageActivity.this, DashboardActivity.class);
+                                            startActivity(i);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(EditPageActivity.this, "Failed to update user details", Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        } else {
+                            // Handle the case where no document with the specified UID was found
+                            Toast.makeText(EditPageActivity.this, "User not found", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(EditPageActivity.this, "Error while searching for user", Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 }

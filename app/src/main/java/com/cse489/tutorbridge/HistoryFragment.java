@@ -1,16 +1,18 @@
 package com.cse489.tutorbridge;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+
+import androidx.fragment.app.Fragment;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.cse489.tutorbridge.adapters.HistoryAdapter;
@@ -25,36 +27,57 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment {
 
     private FirebaseFirestore db;
-    DocumentReference docRef;
-    ArrayList<HistoryClass> histories;
-    HistoryAdapter adapter;
-    ListView historyList;
-    LottieAnimationView progressBar;
-    FirebaseAuth auth;
+    private FirebaseAuth auth;
+    private ArrayList<HistoryClass> histories;
+    private HistoryAdapter adapter;
+    private ListView historyList;
+    private LottieAnimationView progressBar;
+    private boolean isMentor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         db = FirebaseFirestore.getInstance(); // Initialize db object
-        histories = new ArrayList<>(); // Initialize mentors list
         auth = FirebaseAuth.getInstance();
+        histories = new ArrayList<>(); // Initialize histories list
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_history, container, false);
         Context context = view.getContext();
+
+        SharedPreferences pref = context.getSharedPreferences("TutorBridge", MODE_PRIVATE);
+        isMentor = pref.getBoolean("isMentor", false);
 
         historyList = view.findViewById(R.id.historyList);
         progressBar = view.findViewById(R.id.progressBar);
 
-        fetchMentorData(); // Fetch data from Firestore
+        String userId = auth.getCurrentUser().getUid();
+        System.out.println(userId);
+        String queryField = isMentor ? "metorId" : "userId";
 
-        historyList.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        try {
+            db.collection("doubt_history")
+                    .whereEqualTo(queryField, userId)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        histories.clear(); // Clear existing data
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            HistoryClass history = document.toObject(HistoryClass.class);
+                            histories.add(history);
+                            System.out.println(histories.size());
+                        }
+                        adapter.notifyDataSetChanged(); // Notify the adapter that data has changed
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.d("HistoryFragment", "Error fetching history: " + e.getMessage());
+                    }).getException();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
-        adapter = new HistoryAdapter(context, histories); // Pass mentors list to the adapter
+        adapter = new HistoryAdapter(context, histories); // Pass histories list to the adapter
         historyList.setAdapter(adapter);
 
         return view;
@@ -63,32 +86,13 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                historyList.setVisibility(View.VISIBLE);
-                progressBar.setVisibility(View.GONE);
-            }
+        new Handler().postDelayed(() -> {
+            historyList.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         }, 1500);
-
     }
 
-    private void fetchMentorData() {
-        db.collection("doubt_history")
-                .whereEqualTo("userId", auth.getCurrentUser().getUid())
-                .get()
-                .addOnSuccessListener(queryDocumentSnapshots -> {
-                    histories.clear(); // Clear existing data
-                    for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                        HistoryClass history = document.toObject(HistoryClass.class);
-                        //document.getString("mentor")
-                        histories.add(history);
-                        System.out.println(history.toString());
-                    }
-                    adapter.notifyDataSetChanged(); // Notify the adapter that data has changed
-                })
-                .addOnFailureListener(e -> {
-                    Log.d("HistoryFragment", "Error fetching mentors: " + e.getMessage());
-                });
+    private void fetchHistoryData() {
+
     }
 }

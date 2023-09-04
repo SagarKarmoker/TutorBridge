@@ -199,6 +199,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </ProgressBar>
+
     <ImageView
         android:id="@+id/viewPass"
         android:layout_width="30dp"
@@ -207,6 +208,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/etPassword"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
         app:layout_constraintTop_toTopOf="@+id/etPassword"
-        />
+         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
