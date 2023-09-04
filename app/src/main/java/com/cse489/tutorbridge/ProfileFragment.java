@@ -64,7 +64,7 @@ import com.google.gson.Gson;
 public class ProfileFragment extends Fragment {
     LinearLayout proLay;
     LottieAnimationView progressBar;
-    ImageView editProfileBtn;
+    ImageView editProfileBtn, profileBackBtn;
     ShapeableImageView profilePic;
     Button selectPicBtn;
     MaterialCardView verifiedCard;
@@ -104,6 +104,7 @@ public class ProfileFragment extends Fragment {
 
         progressBar = view.findViewById(R.id.progressBar);
         proLay = view.findViewById(R.id.profileLayout);
+        profileBackBtn = view.findViewById(R.id.profileBackBtn);
 
         walletBtn = view.findViewById(R.id.walletBtn);
         editProfileBtn = view.findViewById(R.id.editProfileBtn);
@@ -156,6 +157,7 @@ public class ProfileFragment extends Fragment {
                 userName.setText("User ID: " + currentUser.getName());
                 proName.setText(currentUser.getName());
                 proEmail.setText(currentUser.getEmail());
+                walletBtn.setVisibility(View.GONE);
 //                proMobile.setText(currentUser.getPhone());
 //                proEdu.setText(currentUser.getEducation());
 //                proExp.setText(currentUser.getExpert());
@@ -171,6 +173,14 @@ public class ProfileFragment extends Fragment {
         }catch (Exception e){
             e.printStackTrace();
         }
+
+        profileBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, DashboardActivity.class);
+                startActivity(i);
+            }
+        });
 
         new Handler().post(new Runnable() {
             @Override

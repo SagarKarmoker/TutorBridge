@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cse489.tutorbridge.modal.MentorProfileClass;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,7 +29,7 @@ import java.util.Random;
 
 public class MentorProfile extends AppCompatActivity {
 
-    TextView jobMentorID, tutorName, tutorLocation, expYears, expSalary, tvJobDes, tvQualificationDes;
+    TextView jobMentorID, tutorName, tutorLocation, expYears, expSalary, tvJobDes, tvQualificationDes, expType;
     private FirebaseFirestore db;
     FirebaseStorage storage;
     DocumentReference docRef;
@@ -39,6 +40,7 @@ public class MentorProfile extends AppCompatActivity {
     Button hireBtn;
     MentorProfileClass mentor;
     FirebaseAuth auth;
+    ImageView tutorBackBtn;
 
 
     @Override
@@ -60,11 +62,22 @@ public class MentorProfile extends AppCompatActivity {
         tvQualificationDes = findViewById(R.id.tvQualificationDes);
         profilePic = findViewById(R.id.profilePic);
         hireBtn = findViewById(R.id.hireBtn);
+        expType = findViewById(R.id.expType);
+        tutorBackBtn = findViewById(R.id.tutorBackBtn);
 
         db = FirebaseFirestore.getInstance();
         storage = FirebaseStorage.getInstance();
         storageRef = storage.getReference();
         imageRef = storageRef.child("mentors/profile.png");
+
+
+        tutorBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MentorProfile.this, DashboardActivity.class);
+                startActivity(i);
+            }
+        });
 
         new Handler().post(new Runnable() {
             @Override
@@ -92,22 +105,28 @@ public class MentorProfile extends AppCompatActivity {
         tutorLocation.setText(mentor.getLocation());
         expYears.setText(mentor.getYear() + " years");
         expSalary.setText( "Starting from ৳" + String.valueOf(mentor.getPrice()));
-        tvJobDes.setText(mentor.getExpert());
+        tvJobDes.setText(mentor.getDesc());
         tvQualificationDes.setText(mentor.getEducation());
+        expType.setText(mentor.getExpert());
 
         hireBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    Intent i = new Intent(MentorProfile.this, PaymentActivity.class);
-                    i.putExtra("mentorId", mentor.getUuid());
-                    i.putExtra("userId", auth.getCurrentUser().getUid()); //todo update userid
-                    System.out.println(mentor.getUuid() + "  " + auth.getCurrentUser().getUid());
-                    i.putExtra("mentorSalary", mentor.getPrice());
-                    i.putExtra("mentorCategory", mentor.getExpert());
-                    System.out.println(orderIdGen());
-                    i.putExtra("orderId", orderIdGen());
-                    startActivity(i);
+                    if(auth.getCurrentUser().getUid().equals(mentor.getUuid())){
+                        Toast.makeText(MentorProfile.this, "You can't hire yourself", Toast.LENGTH_SHORT).show();
+                    }
+                    else{
+                        Intent i = new Intent(MentorProfile.this, PaymentActivity.class);
+                        i.putExtra("mentorId", mentor.getUuid());
+                        i.putExtra("userId", auth.getCurrentUser().getUid()); //todo update userid
+                        System.out.println(mentor.getUuid() + "  " + auth.getCurrentUser().getUid());
+                        i.putExtra("mentorSalary", mentor.getPrice());
+                        i.putExtra("mentorCategory", mentor.getExpert());
+                        System.out.println(orderIdGen());
+                        i.putExtra("orderId", orderIdGen());
+                        startActivity(i);
+                    }
                 }
                 catch (Exception e){
                     e.printStackTrace();
