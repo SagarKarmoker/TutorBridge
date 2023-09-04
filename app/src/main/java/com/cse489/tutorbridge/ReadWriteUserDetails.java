@@ -15,4 +15,81 @@ public class ReadWriteUserDetails {
         this.textDescription = textDescription;
     }
 
+    public String getTextName() {
+        return textName;
+    }
+
+    public void setTextName(String textName) {
+        this.textName = textName;
+    }
+
+    public String getTextPhone() {
+        return textPhone;
+    }
+
+    public void setTextPhone(String textPhone) {
+        this.textPhone = textPhone;
+    }
+
+    public String getTextAddress() {
+        return textAddress;
+    }
+
+    public void setTextAddress(String textAddress) {
+        this.textAddress = textAddress;
+    }
+
+    public String getTextEducation() {
+        return textEducation;
+    }
+
+    public void setTextEducation(String textEducation) {
+        this.textEducation = textEducation;
+    }
+
+    public String getTextExpert() {
+        return textExpert;
+    }
+
+    public void setTextExpert(String textExpert) {
+        this.textExpert = textExpert;
+    }
+
+    public String getTextYears() {
+        return textYears;
+    }
+
+    public void setTextYears(String textYears) {
+        this.textYears = textYears;
+    }
+
+    public String getTextPrice() {
+        return textPrice;
+    }
+
+    public void setTextPrice(String textPrice) {
+        this.textPrice = textPrice;
+    }
+
+    public String getTextDescription() {
+        return textDescription;
+    }
+
+    public void setTextDescription(String textDescription) {
+        this.textDescription = textDescription;
+    }
+
+    @Override
+    public String toString() {
+        return "ReadWriteUserDetails{" +
+                "textName='" + textName + '\'' +
+                ", textPhone='" + textPhone + '\'' +
+                ", textAddress='" + textAddress + '\'' +
+                ", textEducation='" + textEducation + '\'' +
+                ", textExpert='" + textExpert + '\'' +
+                ", textYears='" + textYears + '\'' +
+                ", textPrice='" + textPrice + '\'' +
+                ", textDescription='" + textDescription + '\'' +
+                '}';
+    }
 }
