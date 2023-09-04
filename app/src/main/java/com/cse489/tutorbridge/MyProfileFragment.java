@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,7 @@ public class MyProfileFragment extends Fragment {
 
     TextView proName, proSub, proEdu, logoutBtn;
     LinearLayout verifiedAccount, paymentWallet, proHistory,proAch,proPrivacy;
+    RadioGroup statusGroup;
 
     ImageView profileSecPic;
     FirebaseAuth auth;
@@ -56,6 +58,7 @@ public class MyProfileFragment extends Fragment {
         proEdu= view.findViewById(R.id.proEdu);
         logoutBtn= view.findViewById(R.id.logoutBtn);
         profileSecPic = view.findViewById(R.id.profileSecPic);
+        statusGroup = view.findViewById(R.id.statusGroup);
 
         verifiedAccount = view.findViewById(R.id.verifiedAccount);
         paymentWallet = view.findViewById(R.id.paymentWallet);
@@ -85,7 +88,7 @@ public class MyProfileFragment extends Fragment {
                 User currentUser = gson.fromJson(json, User.class);
                 proName.setText(currentUser.getName());
                 proEdu.setText("Student");
-
+                statusGroup.setVisibility(View.GONE);
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -108,8 +111,13 @@ public class MyProfileFragment extends Fragment {
         verifiedAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                myfragment = new ProfileFragment();
-                transaction.replace(R.id.fragment_container, myfragment).addToBackStack(null).commit();
+                if(isMentor){
+                    myfragment = new ProfileFragment();
+                    transaction.replace(R.id.fragment_container, myfragment).addToBackStack(null).commit();
+                }
+                else {
+                    Toast.makeText(context, "You are not a mentor", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
