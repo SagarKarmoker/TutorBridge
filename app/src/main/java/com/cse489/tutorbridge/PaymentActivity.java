@@ -187,7 +187,7 @@ public class PaymentActivity extends AppCompatActivity implements PaymentResultW
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             String date = sdf.format(calendar.getTime());
 
-            OrderModal order = new OrderModal(mentorId, userId, orderId, "Paid", date, "Visa/MasterCard", category);
+            OrderModal order = new OrderModal(mentorId, userId, orderId, "Paid", date, "Visa/MasterCard", category, String.valueOf(salary));
 
 
             order.toString();

@@ -47,11 +47,7 @@ public class MassageAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_message_sent, parent, false);
             // Bind and display sent message
             item_message_sent_view_id = convertView.findViewById(R.id.item_message_sent_view);
-
-
             Message msg = messagesList.get(position);
-
-
             item_message_sent_view_id.setText(msg.getContent());
 
         }
@@ -59,11 +55,7 @@ public class MassageAdapter extends BaseAdapter {
             convertView = inflater.inflate(R.layout.item_message_received, parent, false);
             // Bind and display received message
             item_message_received_id = convertView.findViewById(R.id.item_message_rcv_view);
-
-
             Message msg = messagesList.get(position);
-
-
             item_message_received_id.setText(msg.getContent());
 
         }

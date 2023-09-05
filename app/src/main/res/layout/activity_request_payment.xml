@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Request Payment"
+            android:text="Mentor's Earning Withdraw"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -79,7 +79,7 @@
         android:id="@+id/methodTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select a payment method:"
+        android:text="Select a withdraw method:"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/balanceTv"
         android:layout_marginTop="50dp"
@@ -202,7 +202,7 @@
         android:id="@+id/rePayBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Send Money"
+        android:text="Withdraw"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/bankCard"

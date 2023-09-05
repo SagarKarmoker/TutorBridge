@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class HistoryClass implements Serializable {
 
-    String mentor, user, orderId, orderDate, orderStatus, paymentMethod, orderCategory;
+    String mentor, user, orderId, orderDate, orderStatus, paymentMethod, orderCategory, orderValue;
 
     public HistoryClass(){
 
     }
 
-    public HistoryClass(String mentor, String user, String orderId, String orderDate, String orderStatus, String paymentMethod, String orderCategory) {
+    public HistoryClass(String mentor, String user, String orderId, String orderDate, String orderStatus, String paymentMethod, String orderCategory, String orderValue) {
         this.mentor = mentor;
         this.user = user;
         this.orderId = orderId;
@@ -18,6 +18,7 @@ public class HistoryClass implements Serializable {
         this.orderStatus = orderStatus;
         this.paymentMethod = paymentMethod;
         this.orderCategory = orderCategory;
+        this.orderValue = orderValue;
     }
 
     public String getOrderId() {
@@ -76,14 +77,25 @@ public class HistoryClass implements Serializable {
         this.user = user;
     }
 
+    public String getOrderValue() {
+        return orderValue;
+    }
+
+    public void setOrderValue(String orderValue) {
+        this.orderValue = orderValue;
+    }
+
     @Override
     public String toString() {
         return "HistoryClass{" +
-                "orderId='" + orderId + '\'' +
+                "mentor='" + mentor + '\'' +
+                ", user='" + user + '\'' +
+                ", orderId='" + orderId + '\'' +
                 ", orderDate='" + orderDate + '\'' +
                 ", orderStatus='" + orderStatus + '\'' +
                 ", paymentMethod='" + paymentMethod + '\'' +
                 ", orderCategory='" + orderCategory + '\'' +
+                ", orderValue='" + orderValue + '\'' +
                 '}';
     }
 }

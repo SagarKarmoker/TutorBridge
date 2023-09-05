@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 
 import com.cse489.tutorbridge.PaymentActivity;
 import com.cse489.tutorbridge.R;
+import com.cse489.tutorbridge.chat.ChatMainActivity;
 import com.cse489.tutorbridge.modal.HistoryClass;
 
 import java.io.Serializable;
@@ -42,22 +43,24 @@ public class HistoryAdapter extends ArrayAdapter<HistoryClass> {
         TextView orderStatus = rowView.findViewById(R.id.orderStatus);
         TextView paymentMethod = rowView.findViewById(R.id.paymentMethod);
         TextView orderCategory = rowView.findViewById(R.id.orderCategory);
+        TextView orderAmount = rowView.findViewById(R.id.orderAmount);
 
         HistoryClass history = histories.get(position);
         //Log.d("inAdapter", profile.toString());
         orderId.setText("Order#: "+ history.getOrderId());
         orderDate.setText("On: "+history.getOrderDate());
-        orderStatus.setText("Status: "+history.getOrderStatus());
+        orderStatus.setText("Status: "+ history.getOrderStatus());
         paymentMethod.setText("Payment Method: "+history.getPaymentMethod());
         orderCategory.setText("(Category: "+ history.getOrderCategory() + ")");
+        orderAmount.setText("(Amount: ৳"+ history.getOrderValue() + ")");
 
         //TODO send user and mentor data also
 
         historyMoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(context, PaymentActivity.class);
-                i.putExtra("order", (Serializable) history);
+                Intent i = new Intent(context, ChatMainActivity.class);
+                i.putExtra("getChatRoomKey", history.getOrderId());
                 context.startActivity(i);
             }
         });
