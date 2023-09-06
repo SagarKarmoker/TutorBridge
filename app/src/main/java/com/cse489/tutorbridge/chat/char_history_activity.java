@@ -3,9 +3,13 @@ package com.cse489.tutorbridge.chat;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+
+import com.cse489.tutorbridge.DashboardActivity;
 import com.cse489.tutorbridge.R;
 
 import androidx.annotation.NonNull;
@@ -42,13 +46,16 @@ public class char_history_activity extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseFirestore db;
     SharedPreferences pref;
+    ImageView backToDash;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_char_history);
-        db = FirebaseFirestore.getInstance();
 
+        backToDash = findViewById(R.id.backToDash);
+
+        db = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
         UserID1 = auth.getCurrentUser().getUid();
@@ -65,10 +72,19 @@ public class char_history_activity extends AppCompatActivity {
 
                 OrderModal clickedEvent = orderList.get(position); // retrieve clickable object that type is EventObject
                 String key = chatroomId.get(position);
+                Log.d("ChatHistory Position 2", String.valueOf(key) + " and " + clickedEvent.getOrderId());
 
                 Intent i = new Intent(char_history_activity.this, ChatMainActivity.class);
                 i.putExtra("UserName", clickedEvent.getOrderId());
                 i.putExtra("ChatRoomId", key);
+                startActivity(i);
+            }
+        });
+
+        backToDash.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(char_history_activity.this, DashboardActivity.class);
                 startActivity(i);
             }
         });

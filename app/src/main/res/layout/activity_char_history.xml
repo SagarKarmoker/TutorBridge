@@ -21,6 +21,13 @@
         android:layout_marginLeft="23dp"
         android:layout_marginRight="25dp">
 
+        <ImageView
+            android:id="@+id/backToDash"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/back_button_arrow"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,6 +1,7 @@
 package com.cse489.tutorbridge.chat;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ public class ListAdapter extends ArrayAdapter {
 
     private Activity mContext;
     List<OrderModal> userList;
-    TextView tvName;
+    TextView tvName, mentorName, mentorCategory;
 
     public ListAdapter(Activity mContext, List<OrderModal> userList){
         super(mContext,R.layout.user_item,userList);
@@ -40,11 +41,16 @@ public class ListAdapter extends ArrayAdapter {
         convertView = inflater.inflate(R.layout.user_item,null,false);
 
         tvName = convertView.findViewById(R.id.username);
+        mentorName = convertView.findViewById(R.id.mentorName);
+        mentorCategory = convertView.findViewById(R.id.mentorCategory);
 
 
         OrderModal orderModal = userList.get(position);
 
         tvName.setText(orderModal.getOrderId());
+        mentorName.setText("MentorID: " + orderModal.getMentorId());
+        mentorCategory.setText("Category: " +orderModal.getOrderCategory());
+        Log.d("ChatHistory Position", String.valueOf(position) + " and " + orderModal.getOrderId());
 
         return convertView;
     }

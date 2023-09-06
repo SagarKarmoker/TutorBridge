@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.cse489.tutorbridge.DashboardActivity;
 import com.cse489.tutorbridge.R;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +37,7 @@ public class ChatMainActivity extends AppCompatActivity {
     DatabaseReference rootNode;
     String UserID1="", chatroomkey; //suppose admin sent message retrive id from session id
     String UserID2=""; // retrive id from getTag() when user intaract with UI
-    String orderID;
+    String orderID, fromHistory;
     TextView dummy_user_name;
     EditText massageEd;
     List<Message> massageList;
@@ -53,11 +54,14 @@ public class ChatMainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_main);
+        FirebaseApp.initializeApp(this);
 
         Intent i = getIntent();
         UserID1 = i.getStringExtra("mentorid");
         UserID2 = i.getStringExtra("userid");
         orderID = i.getStringExtra("orderId");
+
+        Intent inFromHistory = getIntent();
 
         auth = FirebaseAuth.getInstance();
 
@@ -78,7 +82,7 @@ public class ChatMainActivity extends AppCompatActivity {
         backChat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(ChatMainActivity.this, DashboardActivity.class);
+                Intent i = new Intent(ChatMainActivity.this, char_history_activity.class);
                 startActivity(i);
             }
         });
@@ -100,7 +104,13 @@ public class ChatMainActivity extends AppCompatActivity {
             chatroomkey = i.getStringExtra("ChatRoomId");
             dummy_user_name.setText(userName);
             openExistingChatRoom(chatroomkey);
-        } else {
+        }
+        else if(inFromHistory.hasExtra("getChatRoomKey")){
+            chatroomkey = inFromHistory.getStringExtra("getChatRoomKey");
+            dummy_user_name.setText(chatroomkey);
+            openExistingChatRoom(chatroomkey);
+        }
+        else {
             // Handle the case when it's a new chat
             if (!UserID1.isEmpty() && !UserID2.isEmpty()) {
                 //chatroomkey = generateChatRoomKey(UserID1, UserID2);

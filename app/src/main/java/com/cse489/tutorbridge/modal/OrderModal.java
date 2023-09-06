@@ -1,7 +1,7 @@
 package com.cse489.tutorbridge.modal;
 
 public class OrderModal {
-    private String orderId, orderStatus, orderDate, paymentMethod, catagory;
+    private String orderId, orderStatus, orderDate, paymentMethod, orderCategory, orderValue;
     private String mentorId, userId;
 
     public OrderModal(){
@@ -15,18 +15,22 @@ public class OrderModal {
                 ", orderStatus='" + orderStatus + '\'' +
                 ", orderDate='" + orderDate + '\'' +
                 ", paymentMethod='" + paymentMethod + '\'' +
-                ", catagory='" + catagory + '\'' +
+                ", orderCategory='" + orderCategory + '\'' +
+                ", orderValue='" + orderValue + '\'' +
+                ", mentorId='" + mentorId + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 
-    public OrderModal( String mentorId, String userId,String orderId, String orderStatus, String orderDate, String paymentMethod, String catagory) {
+    public OrderModal(String mentorId, String userId, String orderId, String orderStatus, String orderDate, String paymentMethod, String orderCategory, String orderValue) {
         this.orderId = orderId;
         this.orderStatus = orderStatus;
         this.orderDate = orderDate;
         this.paymentMethod = paymentMethod;
-        this.catagory = catagory;
+        this.orderCategory = orderCategory;
         this.mentorId=mentorId;
         this.userId = userId;
+        this.orderValue = orderValue;
     }
 
     public String getOrderId() {
@@ -61,14 +65,6 @@ public class OrderModal {
         this.paymentMethod = paymentMethod;
     }
 
-    public String getCatagory() {
-        return catagory;
-    }
-
-    public void setCatagory(String catagory) {
-        this.catagory = catagory;
-    }
-
     public String getMetorId() {
         return mentorId;
     }
@@ -83,5 +79,29 @@ public class OrderModal {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getOrderCategory() {
+        return orderCategory;
+    }
+
+    public void setOrderCategory(String orderCategory) {
+        this.orderCategory = orderCategory;
+    }
+
+    public String getOrderValue() {
+        return orderValue;
+    }
+
+    public void setOrderValue(String orderValue) {
+        this.orderValue = orderValue;
+    }
+
+    public String getMentorId() {
+        return mentorId;
+    }
+
+    public void setMentorId(String mentorId) {
+        this.mentorId = mentorId;
     }
 }

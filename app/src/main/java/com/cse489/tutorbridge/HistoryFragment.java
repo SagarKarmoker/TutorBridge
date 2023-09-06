@@ -91,8 +91,4 @@ public class HistoryFragment extends Fragment {
             progressBar.setVisibility(View.GONE);
         }, 1500);
     }
-
-    private void fetchHistoryData() {
-
-    }
 }

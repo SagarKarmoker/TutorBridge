@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public class RequestPayment extends AppCompatActivity {
     MaterialButton rePayBtn;
     double curBalance = 0;
     String method = "";
+    ImageView rePayBackBtn, paymentHistoryBtn;
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -40,7 +42,23 @@ public class RequestPayment extends AppCompatActivity {
         accountNumber = findViewById(R.id.accountNumber);
         bankCard = findViewById(R.id.bankCard);
         bankName = findViewById(R.id.bankName);
+        rePayBackBtn = findViewById(R.id.rePayBackBtn);
+        paymentHistoryBtn = findViewById(R.id.paymentHistoryBtn);
 
+        rePayBackBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(RequestPayment.this, DashboardActivity.class);
+                startActivity(i);
+            }
+        });
+
+        paymentHistoryBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(RequestPayment.this, "Withdraw History Coming soon", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         rePayRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
